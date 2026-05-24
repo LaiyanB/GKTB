@@ -15,7 +15,7 @@
 * { box-sizing: border-box; }
 
 html {
-  overflow-x: hidden;
+  overflow-x: clip;
 }
 
 body {
@@ -23,7 +23,6 @@ body {
   font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "PingFang SC", "Microsoft YaHei", sans-serif;
   background: var(--bg);
   color: var(--ink);
-  overflow-x: hidden;
 }
 
 button, input, select { font: inherit; }
@@ -131,10 +130,11 @@ input:focus, select:focus {
   background: var(--paper-2);
   border-right: 1px solid var(--line);
   padding: 14px 16px;
-  overflow-y: visible;
+  overflow-y: auto;
   position: sticky;
   top: 0;
   height: 100vh;
+  align-self: start;
 }
 
 .panel, .hero-card, .model-card, .table-card, .draft-card, .result-card, .result-column {
