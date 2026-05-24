@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-05-17T10:38:37.656Z",
+  "generated_at": "2026-05-24T06:34:07.013Z",
   "total": 1567,
   "records": [
     {
@@ -456,7 +456,7 @@
       "school": "北京理工大学珠海学院",
       "aliases": [],
       "province": "广东",
-      "city": "珠海市",
+      "city": "珠海",
       "is_985": false,
       "is_211": false,
       "is_double_first_class": false
@@ -3443,11 +3443,11 @@
     {
       "school": "哈尔滨工业大学",
       "aliases": [
-        "哈尔滨工业大学（深圳）",
-        "哈尔滨工业大学（威海）"
+        "哈尔滨工业大学（威海）",
+        "哈尔滨工业大学（深圳）"
       ],
-      "province": "广东",
-      "city": "深圳市",
+      "province": "山东",
+      "city": "威海市",
       "is_985": true,
       "is_211": true,
       "is_double_first_class": true
@@ -4203,7 +4203,7 @@
       "school": "河南大学",
       "aliases": [],
       "province": "河南",
-      "city": "郑州市",
+      "city": "开封市",
       "is_985": false,
       "is_211": false,
       "is_double_first_class": true
@@ -10235,7 +10235,7 @@
       "school": "四川农业大学",
       "aliases": [],
       "province": "四川",
-      "city": "雅安市",
+      "city": "成都市",
       "is_985": false,
       "is_211": true,
       "is_double_first_class": true
@@ -11991,8 +11991,8 @@
       "aliases": [
         "香港城市大学（东莞）"
       ],
-      "province": "香港",
-      "city": "九龙半岛",
+      "province": "广东",
+      "city": "东莞市",
       "is_985": false,
       "is_211": false,
       "is_double_first_class": false
@@ -13589,8 +13589,8 @@
         "中国地质大学（武汉）",
         "中国地质大学（北京）"
       ],
-      "province": "北京",
-      "city": "北京市",
+      "province": "湖北",
+      "city": "武汉市",
       "is_985": false,
       "is_211": true,
       "is_double_first_class": true
@@ -13818,8 +13818,8 @@
     {
       "school": "中国石油大学",
       "aliases": [
-        "中国石油大学（北京）",
-        "中国石油大学（华东）"
+        "中国石油大学（华东）",
+        "中国石油大学（北京）"
       ],
       "province": "山东",
       "city": "青岛市",
