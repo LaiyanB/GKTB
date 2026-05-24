@@ -1,0 +1,51 @@
+name: Run Data Pipeline
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - "*.xlsx"
+      - "*.xls"
+      - "scripts/**"
+      - "package.json"
+      - ".github/workflows/data-pipeline.yml"
+
+permissions:
+  contents: write
+
+jobs:
+  data-pipeline:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Inspect workbooks
+        run: npm run inspect:data
+
+      - name: Normalize workbook rows
+        run: npm run normalize:data
+
+      - name: Map admissions dataset
+        run: npm run map:data
+
+      - name: Generate school summary
+        run: npm run generate:summary
+
+      - name: Build frontend
+        run: npm run build
+
+      - name: Commit generated offline data
+        uses: stefanzweifel/git-auto-commit-action@v5
+        with:
+          commit_message: "Generate offline admissions dataset"
+          file_pattern: "data/normalized/*.json public/data/*.json"
