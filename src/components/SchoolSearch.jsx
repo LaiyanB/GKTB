@@ -300,6 +300,7 @@ export { SchoolBadges, SchoolDetail }
 export default function SchoolSearch({ onSelectSchool }) {
   var [allSchools, setAllSchools] = useState([])
   var [query, setQuery] = useState('')
+  var [debouncedQuery, setDebouncedQuery] = useState('')
   var inputRef = useRef(null)
   var [loaded, setLoaded] = useState(false)
 
@@ -320,18 +321,27 @@ export default function SchoolSearch({ onSelectSchool }) {
     return function () { alive = false }
   }, [])
 
-  // filter schools by query
+  // debounce query to avoid filtering on every keystroke
+  useEffect(function () {
+    var timer = setTimeout(function () {
+      setDebouncedQuery(query)
+    }, 200)
+    return function () { clearTimeout(timer) }
+  }, [query])
+
+  // filter schools by debounced query
   var results = useMemo(function () {
-    if (!query || query.length < 1) return []
-    var q = query.trim().toLowerCase()
+    if (!debouncedQuery || debouncedQuery.length < 1) return []
+    var q = debouncedQuery.trim().toLowerCase()
     if (!q) return []
     return allSchools.filter(function (s) {
       return s.school.toLowerCase().includes(q)
     }).slice(0, 30)
-  }, [query, allSchools])
+  }, [debouncedQuery, allSchools])
 
   function handleSelect(school) {
     setQuery('')
+    setDebouncedQuery('')
     if (onSelectSchool) onSelectSchool(school)
   }
 
@@ -349,7 +359,7 @@ export default function SchoolSearch({ onSelectSchool }) {
 
       {!loaded && <p className="sch-loading">加载中…</p>}
 
-      {loaded && query && results.length === 0 && (
+      {loaded && debouncedQuery && results.length === 0 && (
         <p className="sch-empty">未找到匹配院校</p>
       )}
 
