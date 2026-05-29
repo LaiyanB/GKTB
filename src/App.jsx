@@ -7,7 +7,6 @@ import { useScoreSegments } from './hooks/useScoreSegments'
 import Login from './components/Login'
 import Sidebar from './components/Sidebar'
 import ResultColumn from './components/ResultColumn'
-import ResultTable from './components/ResultTable'
 import DraftList from './components/DraftList'
 import SchoolSearch, { SchoolDetail } from './components/SchoolSearch'
 
@@ -173,7 +172,6 @@ export default function App() {
           <ResultColumn title="保" items={grouped.保} onAdd={addDraft} onSelectSchool={handleSelectSchool} />
         </section>
 
-        <ResultTable rows={rows} onSelectSchool={handleSelectSchool} />
         <DraftList draft={draft} onRemove={removeDraft} onSelectSchool={handleSelectSchool} />
       </main>
     </div>
