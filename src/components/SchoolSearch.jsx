@@ -380,28 +380,30 @@ export default function SchoolSearch({ onSelectSchool }) {
   return (
     <div className="panel sch-panel">
       <div className="panel-title"><span>03</span><h2>搜索院校</h2></div>
-      <input
-        ref={inputRef}
-        className="sch-input"
-        type="text"
-        placeholder="输入院校名称…"
-        value={query}
-        onChange={function (e) { setQuery(e.target.value) }}
-      />
+      <div className="sch-search-wrap">
+        <input
+          ref={inputRef}
+          className="sch-input"
+          type="text"
+          placeholder="输入院校名称…"
+          value={query}
+          onChange={function (e) { setQuery(e.target.value) }}
+        />
 
-      {!loaded && <p className="sch-loading">加载中…</p>}
+        {!loaded && <p className="sch-loading">加载中…</p>}
 
-      {loaded && deferredQuery && results.length === 0 && (
-        <p className="sch-empty">未找到匹配院校</p>
-      )}
+        {loaded && deferredQuery && results.length === 0 && (
+          <p className="sch-empty">未找到匹配院校</p>
+        )}
 
-      {results.length > 0 && (
-        <div className="sch-results">
-          {results.map(function (s) {
-            return <SchoolResultItem key={s.school} school={s} onSelect={handleSelect} />
-          })}
-        </div>
-      )}
+        {results.length > 0 && (
+          <div className="sch-results">
+            {results.map(function (s) {
+              return <SchoolResultItem key={s.school} school={s} onSelect={handleSelect} />
+            })}
+          </div>
+        )}
+      </div>
     </div>
   )
 }
