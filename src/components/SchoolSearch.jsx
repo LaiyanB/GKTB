@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef, useState } from 'react'
+import { useEffect, useMemo, useRef, useState, useDeferredValue } from 'react'
 import { formatNumber, forecastSchool } from '../utils/predict'
 
 const SUBJECT_LABELS = { physics: '物理类', history: '历史类' }
@@ -297,14 +297,48 @@ function SchoolDetail({ school, onClose }) {
 
 export { SchoolBadges, SchoolDetail }
 
+// Memoized single result row — avoids re-rendering all rows on each keystroke
+var SchoolResultItem = (function () {
+  function SchoolResultItem({ school, onSelect }) {
+    var subjKeys = Object.keys(school.subjects || {})
+    var hasPhy = subjKeys.indexOf('physics') !== -1
+    var hasHis = subjKeys.indexOf('history') !== -1
+    var latestYear = '2024'
+    var physicsData = hasPhy && school.subjects.physics[latestYear]
+    var historyData = hasHis && school.subjects.history[latestYear]
+
+    return (
+      <div className="sch-result-item" onClick={function () { onSelect(school) }}>
+        <div className="sch-result-top">
+          <strong>{school.school}</strong>
+          <span className="sch-city">{school.province}{school.city ? ' ' + school.city : ''}</span>
+        </div>
+        <div className="sch-result-tags">
+          <SchoolBadges school={school} />
+        </div>
+        <div className="sch-result-lines">
+          {hasPhy && physicsData && (
+            <span className="sch-line">物理 {physicsData.min_score || '-'}分 / {physicsData.min_rank ? formatNumber(physicsData.min_rank) : '-'}名</span>
+          )}
+          {hasHis && historyData && (
+            <span className="sch-line">历史 {historyData.min_score || '-'}分 / {historyData.min_rank ? formatNumber(historyData.min_rank) : '-'}名</span>
+          )}
+        </div>
+      </div>
+    )
+  }
+  return SchoolResultItem
+})()
+
 export default function SchoolSearch({ onSelectSchool }) {
-  var [allSchools, setAllSchools] = useState([])
+  var [schools, setSchools] = useState([])
   var [query, setQuery] = useState('')
-  var [debouncedQuery, setDebouncedQuery] = useState('')
   var inputRef = useRef(null)
   var [loaded, setLoaded] = useState(false)
 
-  // load data
+  // Pre-built search index: lowercase name strings for O(1) char access
+  var lowerNames = useRef([])
+
   useEffect(function () {
     var alive = true
     async function load() {
@@ -313,7 +347,10 @@ export default function SchoolSearch({ onSelectSchool }) {
         if (!res.ok) throw new Error('school-summary not found')
         var payload = await res.json()
         var list = Array.isArray(payload.records) ? payload.records : []
-        if (alive) setAllSchools(list)
+        if (alive) {
+          setSchools(list)
+          lowerNames.current = list.map(function (s) { return s.school.toLowerCase() })
+        }
       } catch (_) { /* silent */ }
       if (alive) setLoaded(true)
     }
@@ -321,27 +358,22 @@ export default function SchoolSearch({ onSelectSchool }) {
     return function () { alive = false }
   }, [])
 
-  // debounce query to avoid filtering on every keystroke
-  useEffect(function () {
-    var timer = setTimeout(function () {
-      setDebouncedQuery(query)
-    }, 200)
-    return function () { clearTimeout(timer) }
-  }, [query])
+  // React 18 concurrent: defer the expensive filtering so input stays responsive
+  var deferredQuery = useDeferredValue(query)
 
-  // filter schools by debounced query
   var results = useMemo(function () {
-    if (!debouncedQuery || debouncedQuery.length < 1) return []
-    var q = debouncedQuery.trim().toLowerCase()
+    var q = deferredQuery.trim().toLowerCase()
     if (!q) return []
-    return allSchools.filter(function (s) {
-      return s.school.toLowerCase().includes(q)
-    }).slice(0, 30)
-  }, [debouncedQuery, allSchools])
+    var names = lowerNames.current
+    var out = []
+    for (var i = 0; i < names.length && out.length < 20; i++) {
+      if (names[i].indexOf(q) !== -1) out.push(schools[i])
+    }
+    return out
+  }, [deferredQuery, schools])
 
   function handleSelect(school) {
     setQuery('')
-    setDebouncedQuery('')
     if (onSelectSchool) onSelectSchool(school)
   }
 
@@ -359,47 +391,14 @@ export default function SchoolSearch({ onSelectSchool }) {
 
       {!loaded && <p className="sch-loading">加载中…</p>}
 
-      {loaded && debouncedQuery && results.length === 0 && (
+      {loaded && deferredQuery && results.length === 0 && (
         <p className="sch-empty">未找到匹配院校</p>
       )}
 
       {results.length > 0 && (
         <div className="sch-results">
           {results.map(function (s) {
-            var subjKeys = Object.keys(s.subjects || {})
-            var hasPhy = subjKeys.indexOf('physics') !== -1
-            var hasHis = subjKeys.indexOf('history') !== -1
-            var latestYear = '2024'
-            var physicsData = hasPhy && s.subjects.physics[latestYear]
-            var historyData = hasHis && s.subjects.history[latestYear]
-
-            return (
-              <div
-                key={s.school}
-                className="sch-result-item"
-                onClick={function () { handleSelect(s) }}
-              >
-                <div className="sch-result-top">
-                  <strong>{s.school}</strong>
-                  <span className="sch-city">{s.province}{s.city ? ' ' + s.city : ''}</span>
-                </div>
-                <div className="sch-result-tags">
-                  <SchoolBadges school={s} />
-                </div>
-                <div className="sch-result-lines">
-                  {hasPhy && physicsData && (
-                    <span className="sch-line">
-                      物理 {physicsData.min_score || '-'}分 / {physicsData.min_rank ? formatNumber(physicsData.min_rank) : '-'}名
-                    </span>
-                  )}
-                  {hasHis && historyData && (
-                    <span className="sch-line">
-                      历史 {historyData.min_score || '-'}分 / {historyData.min_rank ? formatNumber(historyData.min_rank) : '-'}名
-                    </span>
-                  )}
-                </div>
-              </div>
-            )
+            return <SchoolResultItem key={s.school} school={s} onSelect={handleSelect} />
           })}
         </div>
       )}
