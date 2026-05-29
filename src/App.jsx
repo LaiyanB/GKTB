@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 import { records as mockRecords, subjectLabels } from './data'
 import { classifyRecord, forecastRecord, formatNumber } from './utils/predict'
 import { adaptAdmissions } from './utils/adaptAdmissions'
@@ -26,6 +26,13 @@ export default function App() {
   const [draft, setDraft] = useState([])
   const [detailSchool, setDetailSchool] = useState(null)
   const [schoolMap, setSchoolMap] = useState({})
+  const detailRef = useRef(null)
+
+  useEffect(function () {
+    if (detailSchool && detailRef.current) {
+      detailRef.current.scrollIntoView({ behavior: 'smooth', block: 'start' })
+    }
+  }, [detailSchool])
 
   const offline = useOfflineAdmissions()
   const { lookupRank, status: segStatus } = useScoreSegments()
@@ -87,7 +94,7 @@ export default function App() {
 
   function handleSelectSchool(schoolName) {
     var school = schoolMap[schoolName]
-    if (school) setDetailSchool(school)
+    if (school) setDetailSchool({ ...school })
   }
 
   if (!loggedIn) return <Login onLogin={() => setLoggedIn(true)} />
@@ -139,7 +146,7 @@ export default function App() {
         </header>
 
         {detailSchool && (
-          <section className="detail-card">
+          <section className="detail-card" ref={detailRef}>
             <div className="detail-card-head">
               <h2>院校详情</h2>
               <button className="sch-close" onClick={function () { setDetailSchool(null) }}>×</button>
