@@ -11,13 +11,15 @@ function SchoolTags({ item }) {
   )
 }
 
-export default function ResultCard({ item, onAdd, onSelectSchool, onFavorite, isFavorited }) {
+export default function ResultCard({ item, onSelectSchool, onFavorite, isFavorited }) {
   var favorited = isFavorited ? isFavorited(item.school) : false
   return (
     <article className="result-card" onClick={function () { onSelectSchool(item.school) }}>
       <div className="result-head">
         <span className={`badge ${item.level}`}>{item.level}</span>
-        <span className="city">{item.city}</span>
+        {onFavorite && (
+          <button className={'fav-btn-sm' + (favorited ? ' favorited' : '')} onClick={function (e) { e.stopPropagation(); onFavorite(item) }} title={favorited ? '取消收藏' : '加入自选'}>{favorited ? '★' : '☆'}</button>
+        )}
       </div>
       <h3>{item.school}</h3>
       <SchoolTags item={item} />
@@ -29,12 +31,6 @@ export default function ResultCard({ item, onAdd, onSelectSchool, onFavorite, is
       <p className="reason-text">
         {trendLabel(item.rateChange)}；当前排位与预测排位差率 {formatPercent(item.diffRate)}。{item.note}
       </p>
-      <div className="result-actions">
-        <button className="ghost-btn" onClick={function (e) { e.stopPropagation(); onAdd(item) }}>加入志愿草案</button>
-        {onFavorite && (
-          <button className={'fav-btn' + (favorited ? ' favorited' : '')} onClick={function (e) { e.stopPropagation(); onFavorite(item) }} title={favorited ? '已加入自选院校' : '加入自选院校'}>{favorited ? '★' : '☆'}</button>
-        )}
-      </div>
     </article>
   )
 }

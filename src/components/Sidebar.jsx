@@ -73,31 +73,6 @@ export default function Sidebar(props) {
         )}
       </section>
 
-      <section className="panel">
-        <div className="panel-title"><span>04</span><h2>志愿草案</h2></div>
-        {(!props.draft || props.draft.length === 0) && (
-          <p className="sch-empty">点击卡片「加入志愿草案」</p>
-        )}
-        {props.draft && props.draft.length > 0 && (
-          <div className="fav-list">
-            {props.draft.map(function (item, index) {
-              return (
-                <div className="fav-item" key={item.id || index}>
-                  <span className="fav-index">{index + 1}</span>
-                  <strong
-                    className="draft-school-name"
-                    onClick={function () { if (props.onSelectSchool) props.onSelectSchool(item.school) }}
-                  >{item.school}</strong>
-                  <button
-                    className="fav-remove"
-                    onClick={function () { if (props.onRemoveDraft) props.onRemoveDraft(item.id) }}
-                  >×</button>
-                </div>
-              )
-            })}
-          </div>
-        )}
-      </section>
     </aside>
   )
 }

@@ -21,7 +21,6 @@ export default function App() {
   const [only985, setOnly985] = useState(false)
   const [only211, setOnly211] = useState(false)
   const [onlyDoubleFirstClass, setOnlyDoubleFirstClass] = useState(false)
-  const [draft, setDraft] = useState([])
   const [favorites, setFavorites] = useState([])
   const [detailSchool, setDetailSchool] = useState(null)
   const [schoolMap, setSchoolMap] = useState({})
@@ -83,14 +82,6 @@ export default function App() {
     保: rows.filter((item) => item.level === '保')
   }
 
-  function addDraft(item) {
-    setDraft((current) => current.some((entry) => entry.id === item.id) ? current : [...current, item])
-  }
-
-  function removeDraft(id) {
-    setDraft((current) => current.filter((item) => item.id !== id))
-  }
-
   function toggleFavorite(item) {
     setFavorites(function (current) {
       var exists = current.some(function (entry) { return entry.school === item.school })
@@ -123,8 +114,6 @@ export default function App() {
       <Sidebar
         favorites={favorites}
         onRemoveFavorite={removeFavorite}
-        draft={draft}
-        onRemoveDraft={removeDraft}
         onSelectSchool={handleSelectSchool}
         subject={subject}
         setSubject={setSubject}
@@ -192,9 +181,9 @@ export default function App() {
         </section>
 
         <section className="result-grid">
-          <ResultColumn title="冲" items={grouped.冲} onAdd={addDraft} onSelectSchool={handleSelectSchool} onFavorite={toggleFavorite} isFavorited={isFavorited} />
-          <ResultColumn title="稳" items={grouped.稳} onAdd={addDraft} onSelectSchool={handleSelectSchool} onFavorite={toggleFavorite} isFavorited={isFavorited} />
-          <ResultColumn title="保" items={grouped.保} onAdd={addDraft} onSelectSchool={handleSelectSchool} onFavorite={toggleFavorite} isFavorited={isFavorited} />
+          <ResultColumn title="冲" items={grouped.冲} onSelectSchool={handleSelectSchool} onFavorite={toggleFavorite} isFavorited={isFavorited} />
+          <ResultColumn title="稳" items={grouped.稳} onSelectSchool={handleSelectSchool} onFavorite={toggleFavorite} isFavorited={isFavorited} />
+          <ResultColumn title="保" items={grouped.保} onSelectSchool={handleSelectSchool} onFavorite={toggleFavorite} isFavorited={isFavorited} />
         </section>
 
       </main>
