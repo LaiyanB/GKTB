@@ -7,7 +7,6 @@ import { useScoreSegments } from './hooks/useScoreSegments'
 import Login from './components/Login'
 import Sidebar from './components/Sidebar'
 import ResultColumn from './components/ResultColumn'
-import DraftList from './components/DraftList'
 import SchoolSearch, { SchoolDetail } from './components/SchoolSearch'
 
 export default function App() {
@@ -92,8 +91,12 @@ export default function App() {
     setDraft((current) => current.filter((item) => item.id !== id))
   }
 
-  function addFavorite(item) {
-    setFavorites((current) => current.some(function (entry) { return entry.school === item.school }) ? current : [...current, item])
+  function toggleFavorite(item) {
+    setFavorites(function (current) {
+      var exists = current.some(function (entry) { return entry.school === item.school })
+      if (exists) return current.filter(function (entry) { return entry.school !== item.school })
+      return [...current, item]
+    })
   }
 
   function removeFavorite(schoolName) {
@@ -120,6 +123,8 @@ export default function App() {
       <Sidebar
         favorites={favorites}
         onRemoveFavorite={removeFavorite}
+        draft={draft}
+        onRemoveDraft={removeDraft}
         onSelectSchool={handleSelectSchool}
         subject={subject}
         setSubject={setSubject}
@@ -144,7 +149,7 @@ export default function App() {
       />
 
       <main className="workspace">
-        <SchoolSearch onSelectSchool={setDetailSchool} onFavorite={addFavorite} isFavorited={isFavorited} />
+        <SchoolSearch onSelectSchool={setDetailSchool} onFavorite={toggleFavorite} isFavorited={isFavorited} />
 
         <header className="hero-card">
           <div>
@@ -187,12 +192,11 @@ export default function App() {
         </section>
 
         <section className="result-grid">
-          <ResultColumn title="冲" items={grouped.冲} onAdd={addDraft} onSelectSchool={handleSelectSchool} onFavorite={addFavorite} isFavorited={isFavorited} />
-          <ResultColumn title="稳" items={grouped.稳} onAdd={addDraft} onSelectSchool={handleSelectSchool} onFavorite={addFavorite} isFavorited={isFavorited} />
-          <ResultColumn title="保" items={grouped.保} onAdd={addDraft} onSelectSchool={handleSelectSchool} onFavorite={addFavorite} isFavorited={isFavorited} />
+          <ResultColumn title="冲" items={grouped.冲} onAdd={addDraft} onSelectSchool={handleSelectSchool} onFavorite={toggleFavorite} isFavorited={isFavorited} />
+          <ResultColumn title="稳" items={grouped.稳} onAdd={addDraft} onSelectSchool={handleSelectSchool} onFavorite={toggleFavorite} isFavorited={isFavorited} />
+          <ResultColumn title="保" items={grouped.保} onAdd={addDraft} onSelectSchool={handleSelectSchool} onFavorite={toggleFavorite} isFavorited={isFavorited} />
         </section>
 
-        <DraftList draft={draft} onRemove={removeDraft} onSelectSchool={handleSelectSchool} />
       </main>
     </div>
   )
