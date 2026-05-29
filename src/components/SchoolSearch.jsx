@@ -299,7 +299,7 @@ export { SchoolBadges, SchoolDetail }
 
 // Memoized single result row — avoids re-rendering all rows on each keystroke
 var SchoolResultItem = (function () {
-  function SchoolResultItem({ school, onSelect }) {
+  function SchoolResultItem({ school, onSelect, onFavorite }) {
     var subjKeys = Object.keys(school.subjects || {})
     var hasPhy = subjKeys.indexOf('physics') !== -1
     var hasHis = subjKeys.indexOf('history') !== -1
@@ -311,7 +311,12 @@ var SchoolResultItem = (function () {
       <div className="sch-result-item" onClick={function () { onSelect(school) }}>
         <div className="sch-result-top">
           <strong>{school.school}</strong>
-          <span className="sch-city">{school.province}{school.city ? ' ' + school.city : ''}</span>
+          <div className="sch-result-top-right">
+            {onFavorite && (
+              <button className="fav-btn-sm" onClick={function (e) { e.stopPropagation(); onFavorite(school) }} title="加入自选院校">☆</button>
+            )}
+            <span className="sch-city">{school.province}{school.city ? ' ' + school.city : ''}</span>
+          </div>
         </div>
         <div className="sch-result-tags">
           <SchoolBadges school={school} />
@@ -330,7 +335,7 @@ var SchoolResultItem = (function () {
   return SchoolResultItem
 })()
 
-export default function SchoolSearch({ onSelectSchool }) {
+export default function SchoolSearch({ onSelectSchool, onFavorite }) {
   var [schools, setSchools] = useState([])
   var [query, setQuery] = useState('')
   var inputRef = useRef(null)
@@ -399,7 +404,7 @@ export default function SchoolSearch({ onSelectSchool }) {
         {results.length > 0 && (
           <div className="sch-results">
             {results.map(function (s) {
-              return <SchoolResultItem key={s.school} school={s} onSelect={handleSelect} />
+              return <SchoolResultItem key={s.school} school={s} onSelect={handleSelect} onFavorite={onFavorite} />
             })}
           </div>
         )}

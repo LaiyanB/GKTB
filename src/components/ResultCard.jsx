@@ -11,7 +11,7 @@ function SchoolTags({ item }) {
   )
 }
 
-export default function ResultCard({ item, onAdd, onSelectSchool }) {
+export default function ResultCard({ item, onAdd, onSelectSchool, onFavorite }) {
   return (
     <article className="result-card" onClick={function () { onSelectSchool(item.school) }}>
       <div className="result-head">
@@ -28,7 +28,12 @@ export default function ResultCard({ item, onAdd, onSelectSchool }) {
       <p className="reason-text">
         {trendLabel(item.rateChange)}；当前排位与预测排位差率 {formatPercent(item.diffRate)}。{item.note}
       </p>
-      <button className="ghost-btn" onClick={function (e) { e.stopPropagation(); onAdd(item) }}>加入志愿草案</button>
+      <div className="result-actions">
+        <button className="ghost-btn" onClick={function (e) { e.stopPropagation(); onAdd(item) }}>加入志愿草案</button>
+        {onFavorite && (
+          <button className="fav-btn" onClick={function (e) { e.stopPropagation(); onFavorite(item) }} title="加入自选院校">☆</button>
+        )}
+      </div>
     </article>
   )
 }
