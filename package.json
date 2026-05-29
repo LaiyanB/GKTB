@@ -10,6 +10,7 @@
     "inspect:data": "node scripts/inspect-workbooks.mjs",
     "normalize:data": "node scripts/normalize-workbooks.mjs",
     "map:data": "node scripts/map-admissions.mjs",
+    "fill:ranks": "node scripts/fill-missing-ranks.mjs",
     "generate:summary": "node scripts/generate-school-summary.mjs"
   },
   "dependencies": {

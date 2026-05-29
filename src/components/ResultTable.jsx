@@ -9,6 +9,11 @@ function Tags({ item }) {
   return tags.length ? tags.join(' / ') : '-'
 }
 
+function latestRank(item) {
+  var year = item.dataYears && item.dataYears.length > 0 ? item.dataYears[0] : null
+  return year != null ? { year: year, rank: item.ranks[year] } : { year: null, rank: null }
+}
+
 export default function ResultTable({ rows, onSelectSchool }) {
   const { visibleItems, hiddenCount } = getVisibleItems(rows, RESULT_TABLE_LIMIT)
 
@@ -28,26 +33,29 @@ export default function ResultTable({ rows, onSelectSchool }) {
               <th>专业组</th>
               <th>专业</th>
               <th>城市</th>
-              <th>年份</th>
-              <th>2024</th>
-              <th>预测</th>
+              <th>数据年份</th>
+              <th>最新排位</th>
+              <th>预测排位</th>
               <th>分层</th>
             </tr>
           </thead>
           <tbody>
-            {visibleItems.map((item) => (
-              <tr key={item.id} className="clickable-row" onClick={function () { if (onSelectSchool) onSelectSchool(item.school) }}>
-                <td>{item.school}</td>
-                <td>{Tags({ item })}</td>
-                <td>{item.group}</td>
-                <td>{item.major}</td>
-                <td>{item.city}</td>
-                <td>{item.dataYears?.join('/') || '-'}</td>
-                <td>{formatNumber(item.ranks[2024])}</td>
-                <td>{formatNumber(item.predictedRank)}</td>
-                <td><span className={`badge ${item.level}`}>{item.level}</span></td>
-              </tr>
-            ))}
+            {visibleItems.map((item) => {
+              var lr = latestRank(item)
+              return (
+                <tr key={item.id} className="clickable-row" onClick={function () { if (onSelectSchool) onSelectSchool(item.school) }}>
+                  <td>{item.school}</td>
+                  <td>{Tags({ item })}</td>
+                  <td>{item.group}</td>
+                  <td>{item.major}</td>
+                  <td>{item.city}</td>
+                  <td>{item.dataYears?.join('/') || '-'}</td>
+                  <td>{formatNumber(lr.rank)}</td>
+                  <td>{formatNumber(item.predictedRank)}</td>
+                  <td><span className={`badge ${item.level}`}>{item.level}</span></td>
+                </tr>
+              )
+            })}
           </tbody>
         </table>
       </div>

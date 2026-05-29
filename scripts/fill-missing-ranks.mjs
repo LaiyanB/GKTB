@@ -39,11 +39,8 @@ let fallback = 0;
 
 for (const rec of admissions.records) {
   if (rec.min_score == null || rec.min_rank != null) continue;
-  if (rec.year !== 2023) continue; // 只有2023年有这个情况
 
-  const key = `${rec.year}_${rec.subject}_${rec.score ?? rec.min_score}`;
-
-  // 先精确查表（用 min_score 查）
+  // 所有年份都走一分一段表回填
   const exactKey = `${rec.year}_${rec.subject}_${rec.min_score}`;
   let rank = lookup.get(exactKey);
 
@@ -65,8 +62,11 @@ for (const rec of admissions.records) {
   }
 }
 
+const stillMissing = admissions.records.filter(r => r.min_score != null && r.min_rank == null)
+const stillMissingByYear = {}
+stillMissing.forEach(r => { stillMissingByYear[r.year] = (stillMissingByYear[r.year] || 0) + 1 })
 console.log(`Filled ${filled} missing ranks (${exact} exact, ${fallback} fallback)`);
-console.log(`Skipped ${admissions.records.filter(r => r.min_score != null && r.min_rank === null).length} still-missing`);
+console.log(`Still missing: ${stillMissing.length} (by year: ${JSON.stringify(stillMissingByYear)})`);
 
 fs.writeFileSync(admissionsPath, JSON.stringify(admissions, null, 2), 'utf-8');
 console.log(`Written: ${admissionsPath}`);

@@ -207,34 +207,24 @@ function SchoolRankChart({ subjectData, subject }) {
               <th>年份</th>
               <th>最低分</th>
               <th>最低排位</th>
-              {showPrediction && <th>残差</th>}
             </tr>
           </thead>
           <tbody>
             {[2024, 2023, 2022, 2021].map(y => {
-              const d = subjectData[String(y)]
-              const dot = dots.find(p => p.year === y)
+              var d = subjectData[String(y)]
               return (
-                <tr key={y} className={dot && dot.visible ? 'chart-table-row-visible' : ''}>
+                <tr key={y}>
                   <td>{y}</td>
                   <td>{d && d.min_score ? d.min_score : '-'}</td>
                   <td>{d && d.min_rank ? formatNumber(d.min_rank) : '-'}</td>
-                  {showPrediction && (
-                    <td className={dot && dot.residual <= 0 ? 'res-pos' : 'res-neg'}>
-                      {dot ? (dot.residual <= 0 ? '' : '+') + formatNumber(Math.abs(dot.residual)) : '-'}
-                    </td>
-                  )}
                 </tr>
               )
             })}
-            {showPrediction && (
-              <tr className="pred-row">
-                <td>2025 (预测)</td>
-                <td>-</td>
-                <td><strong>{formatNumber(predictedRank)}</strong></td>
-                <td><span className="pred-badge">基线</span></td>
-              </tr>
-            )}
+            <tr className="pred-row">
+              <td>2025 (预测)</td>
+              <td>-</td>
+              <td><strong>{formatNumber(predictedRank)}</strong></td>
+            </tr>
           </tbody>
         </table>
       </div>
@@ -243,19 +233,31 @@ function SchoolRankChart({ subjectData, subject }) {
 }
 
 /* ── school detail panel ── */
-function SchoolDetail({ school, onClose }) {
-  const [activeSubject, setActiveSubject] = useState(
-    school.subjects && school.subjects.physics ? 'physics' : 'history'
+function SchoolDetail({ school, onClose, majors }) {
+  var majorList = majors || []
+
+  // Collect available subjects from majors data
+  var availableSubjects = useMemo(function () {
+    var set = new Set()
+    for (var i = 0; i < majorList.length; i++) { set.add(majorList[i].subject) }
+    return [...set].sort()
+  }, [majorList])
+
+  var [activeSubject, setActiveSubject] = useState(
+    availableSubjects.indexOf('physics') !== -1 ? 'physics' : (availableSubjects[0] || 'physics')
   )
 
-  // Reset to available subject when school changes
-  useEffect(() => {
-    if (school.subjects) {
-      setActiveSubject(school.subjects.physics ? 'physics' : 'history')
+  useEffect(function () {
+    if (availableSubjects.length > 0) {
+      setActiveSubject(availableSubjects.indexOf('physics') !== -1 ? 'physics' : availableSubjects[0])
     }
-  }, [school])
+  }, [availableSubjects.join(',')])
 
-  const subjectData = school.subjects ? school.subjects[activeSubject] : null
+  var filteredMajors = useMemo(function () {
+    return majorList.filter(function (m) { return m.subject === activeSubject })
+  }, [majorList, activeSubject])
+
+  var years = ['2024', '2023', '2022', '2021']
 
   return (
     <div className="sch-detail">
@@ -267,13 +269,11 @@ function SchoolDetail({ school, onClose }) {
           </p>
           <SchoolBadges school={school} />
         </div>
-        <button className="sch-close" onClick={onClose}>×</button>
       </div>
 
-      {/* subject tabs — only show if more than one subject */}
-      {school.subjects && Object.keys(school.subjects).length > 1 && (
+      {availableSubjects.length > 1 && (
         <div className="sch-tabs">
-          {Object.keys(school.subjects).sort().map(function (subj) {
+          {availableSubjects.map(function (subj) {
             return (
               <button
                 key={subj}
@@ -287,9 +287,46 @@ function SchoolDetail({ school, onClose }) {
         </div>
       )}
 
-      {/* animated rank chart */}
-      {subjectData && (
-        <SchoolRankChart subjectData={subjectData} subject={activeSubject} />
+      {/* 动态排位趋势图 */}
+      {school.subjects && school.subjects[activeSubject] && (
+        <SchoolRankChart subjectData={school.subjects[activeSubject]} subject={activeSubject} />
+      )}
+
+      {filteredMajors.length === 0 && (
+        <p className="sch-empty">暂无{SUBJECT_LABELS[activeSubject]}专业数据</p>
+      )}
+
+      {filteredMajors.length > 0 && (
+        <div className="sch-majors-table-wrap">
+          <p className="sch-section-label">各专业历年排位</p>
+          <table className="sch-table sch-majors-table">
+            <thead>
+              <tr>
+                <th>专业组</th>
+                <th>专业</th>
+                {years.map(function (y) { return <th key={y}>{y}排位</th> })}
+                <th>预测排位</th>
+                <th>分层</th>
+              </tr>
+            </thead>
+            <tbody>
+              {filteredMajors.map(function (m, idx) {
+                return (
+                  <tr key={idx}>
+                    <td>{m.group}</td>
+                    <td>{m.major}</td>
+                    {years.map(function (y) {
+                      var r = m.ranks[y]
+                      return <td key={y}>{r ? formatNumber(r) : '-'}</td>
+                    })}
+                    <td><strong>{m.predictedRank ? formatNumber(m.predictedRank) : '-'}</strong></td>
+                    <td><span className={'badge ' + (m.level || '稳')}>{m.level || '-'}</span></td>
+                  </tr>
+                )
+              })}
+            </tbody>
+          </table>
+        </div>
       )}
     </div>
   )

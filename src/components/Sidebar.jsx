@@ -49,28 +49,12 @@ export default function Sidebar(props) {
 
       <section className="panel">
         <div className="panel-title"><span>03</span><h2>自选院校</h2></div>
-        {(!props.favorites || props.favorites.length === 0) && (
-          <p className="sch-empty">点击院校旁的 ☆ 加入收藏</p>
-        )}
-        {props.favorites && props.favorites.length > 0 && (
-          <div className="fav-list">
-            {props.favorites.map(function (item, index) {
-              return (
-                <div className="fav-item" key={item.school || index}>
-                  <span className="fav-index">{index + 1}</span>
-                  <strong
-                    className="draft-school-name"
-                    onClick={function () { if (props.onSelectSchool) props.onSelectSchool(item.school) }}
-                  >{item.school}</strong>
-                  <button
-                    className="fav-remove"
-                    onClick={function () { if (props.onRemoveFavorite) props.onRemoveFavorite(item.school) }}
-                  >×</button>
-                </div>
-              )
-            })}
-          </div>
-        )}
+        <p className="sch-empty">
+          已收藏 <strong>{props.favorites ? props.favorites.length : 0}</strong> 所院校
+        </p>
+        <button className="ghost-btn fav-open-btn" onClick={props.onOpenFavorites}>
+          ☆ 查看志愿清单
+        </button>
       </section>
 
     </aside>

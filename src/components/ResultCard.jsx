@@ -1,4 +1,4 @@
-import { formatNumber, formatPercent, trendLabel } from '../utils/predict'
+import { formatNumber } from '../utils/predict'
 
 function SchoolTags({ item }) {
   return (
@@ -13,6 +13,9 @@ function SchoolTags({ item }) {
 
 export default function ResultCard({ item, onSelectSchool, onFavorite, isFavorited }) {
   var favorited = isFavorited ? isFavorited(item.school) : false
+  // 取最新可用年份的排位值（dataYears 已按年份降序排列）
+  var latestYear = item.dataYears && item.dataYears.length > 0 ? item.dataYears[0] : null
+  var latestRank = latestYear != null ? item.ranks[latestYear] : null
   return (
     <article className="result-card" onClick={function () { onSelectSchool(item.school) }}>
       <div className="result-head">
@@ -25,12 +28,9 @@ export default function ResultCard({ item, onSelectSchool, onFavorite, isFavorit
       <SchoolTags item={item} />
       <p className="major-line">{item.group} · {item.major}</p>
       <div className="rank-grid">
-        <div><span>2024 排位</span><strong>{formatNumber(item.ranks[2024])}</strong></div>
+        <div><span>{latestYear != null ? latestYear + ' 排位' : '往年排位'}</span><strong>{formatNumber(latestRank)}</strong></div>
         <div><span>预测排位</span><strong>{formatNumber(item.predictedRank)}</strong></div>
       </div>
-      <p className="reason-text">
-        {trendLabel(item.rateChange)}；当前排位与预测排位差率 {formatPercent(item.diffRate)}。{item.note}
-      </p>
     </article>
   )
 }

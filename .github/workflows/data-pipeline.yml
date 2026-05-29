@@ -38,6 +38,9 @@ jobs:
       - name: Map admissions dataset
         run: npm run map:data
 
+      - name: Fill missing ranks from score-segments
+        run: npm run fill:ranks
+
       - name: Generate school summary
         run: npm run generate:summary
 

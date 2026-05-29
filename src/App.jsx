@@ -7,6 +7,7 @@ import { useScoreSegments } from './hooks/useScoreSegments'
 import Login from './components/Login'
 import Sidebar from './components/Sidebar'
 import ResultColumn from './components/ResultColumn'
+import FavoritesPage from './components/FavoritesPage'
 import SchoolSearch, { SchoolDetail } from './components/SchoolSearch'
 
 export default function App() {
@@ -22,6 +23,8 @@ export default function App() {
   const [only211, setOnly211] = useState(false)
   const [onlyDoubleFirstClass, setOnlyDoubleFirstClass] = useState(false)
   const [favorites, setFavorites] = useState([])
+  const [showFavorites, setShowFavorites] = useState(false)
+  const [exiting, setExiting] = useState(false)
   const [detailSchool, setDetailSchool] = useState(null)
   const [schoolMap, setSchoolMap] = useState({})
   const detailRef = useRef(null)
@@ -76,10 +79,20 @@ export default function App() {
       .sort((a, b) => a.predictedRank - b.predictedRank)
   }, [sourceRecords, subject, city, major, publicOnly, noCoop, only985, only211, onlyDoubleFirstClass, rank])
 
+  // 按学校去重：同一所学校保留预测排位最好的那条（predictedRank 最小）
+  const deduped = useMemo(function () {
+    var seen = new Set()
+    return rows.filter(function (item) {
+      if (seen.has(item.school)) return false
+      seen.add(item.school)
+      return true
+    })
+  }, [rows])
+
   const grouped = {
-    冲: rows.filter((item) => item.level === '冲'),
-    稳: rows.filter((item) => item.level === '稳'),
-    保: rows.filter((item) => item.level === '保')
+    冲: deduped.filter((item) => item.level === '冲'),
+    稳: deduped.filter((item) => item.level === '稳'),
+    保: deduped.filter((item) => item.level === '保')
   }
 
   function toggleFavorite(item) {
@@ -94,6 +107,19 @@ export default function App() {
     setFavorites((current) => current.filter(function (item) { return item.school !== schoolName }))
   }
 
+  function reorderFavorites(fromIndex, toIndex) {
+    setFavorites(function (current) {
+      var copy = current.slice()
+      var item = copy.splice(fromIndex, 1)[0]
+      copy.splice(toIndex, 0, item)
+      return copy
+    })
+  }
+
+  function clearFavorites() {
+    setFavorites([])
+  }
+
   var favoritedSet = useMemo(function () {
     return new Set(favorites.map(function (f) { return f.school }))
   }, [favorites])
@@ -104,8 +130,45 @@ export default function App() {
 
   function handleSelectSchool(schoolName) {
     var school = schoolMap[schoolName]
-    if (school) setDetailSchool({ ...school })
+    if (school) setDetailSchool({ ...school, _name: schoolName })
   }
+
+  // 当前查看院校的各专业历年数据（按专业组+专业分组）
+  var detailMajors = useMemo(function () {
+    if (!detailSchool || !detailSchool._name) return []
+    var name = detailSchool._name
+    var groups = new Map()
+    for (var i = 0; i < sourceRecords.length; i++) {
+      var r = sourceRecords[i]
+      if (r.school !== name) continue
+      var key = (r.subject || '') + '::' + (r.group || '') + '::' + (r.major || '')
+      if (!groups.has(key)) {
+        groups.set(key, {
+          subject: r.subject,
+          group: r.group,
+          major: r.major,
+          direction: r.direction,
+          ranks: { ...(r.ranks || {}) },
+          predictedRank: r.predictedRank,
+          predictedRate: r.predictedRate,
+          level: r.level
+        })
+      } else {
+        var existing = groups.get(key)
+        if (r.ranks) {
+          Object.keys(r.ranks).forEach(function (y) {
+            if (!(y in existing.ranks) || r.ranks[y] < existing.ranks[y]) {
+              existing.ranks[y] = r.ranks[y]
+            }
+          })
+        }
+      }
+    }
+    return [...groups.values()].sort(function (a, b) {
+      if (a.subject !== b.subject) return a.subject === 'physics' ? -1 : 1
+      return (a.predictedRank || 999999) - (b.predictedRank || 999999)
+    })
+  }, [detailSchool, sourceRecords])
 
   if (!loggedIn) return <Login onLogin={() => setLoggedIn(true)} />
 
@@ -114,6 +177,7 @@ export default function App() {
       <Sidebar
         favorites={favorites}
         onRemoveFavorite={removeFavorite}
+        onOpenFavorites={function () { setShowFavorites(true) }}
         onSelectSchool={handleSelectSchool}
         subject={subject}
         setSubject={setSubject}
@@ -138,9 +202,36 @@ export default function App() {
       />
 
       <main className="workspace">
-        <SchoolSearch onSelectSchool={setDetailSchool} onFavorite={toggleFavorite} isFavorited={isFavorited} />
+        <button
+          className={'workspace-back' + (showFavorites || detailSchool ? ' visible' : '') + (exiting ? ' exiting' : '')}
+          onClick={function () {
+            setExiting(true)
+            setTimeout(function () {
+              setShowFavorites(false)
+              setDetailSchool(null)
+              setExiting(false)
+            }, 160)
+          }}
+          title="返回"
+          disabled={!(showFavorites || detailSchool) || exiting}
+        >←</button>
 
-        <header className="hero-card">
+        <div key={showFavorites ? 'fav' : (detailSchool ? 'detail' : 'main')} className={'workspace-content' + (exiting ? ' exiting' : '')}>
+          {showFavorites ? (
+            <FavoritesPage
+            favorites={favorites}
+            onRemove={removeFavorite}
+            onReorder={reorderFavorites}
+            onClear={clearFavorites}
+            onSelectSchool={handleSelectSchool}
+            onFavorite={toggleFavorite}
+            isFavorited={isFavorited}
+          />
+        ) : (
+          <>
+            <SchoolSearch onSelectSchool={setDetailSchool} onFavorite={toggleFavorite} isFavorited={isFavorited} />
+
+            <header className="hero-card">
           <div>
             <p className="eyebrow">Offline Admissions Dataset</p>
             <h2>冲稳保推荐工作台</h2>
@@ -162,9 +253,8 @@ export default function App() {
           <section className="detail-card" ref={detailRef}>
             <div className="detail-card-head">
               <h2>院校详情</h2>
-              <button className="sch-close" onClick={function () { setDetailSchool(null) }}>×</button>
             </div>
-            <SchoolDetail school={detailSchool} onClose={function () { setDetailSchool(null) }} />
+            <SchoolDetail school={detailSchool} majors={detailMajors} onClose={function () { setDetailSchool(null) }} />
           </section>
         )}
 
@@ -185,6 +275,9 @@ export default function App() {
           <ResultColumn title="稳" items={grouped.稳} onSelectSchool={handleSelectSchool} onFavorite={toggleFavorite} isFavorited={isFavorited} />
           <ResultColumn title="保" items={grouped.保} onSelectSchool={handleSelectSchool} onFavorite={toggleFavorite} isFavorited={isFavorited} />
         </section>
+          </>
+        )}
+        </div>
 
       </main>
     </div>
