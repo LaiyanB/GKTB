@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-05-29T13:45:44.125Z",
+  "generated_at": "2026-05-29T16:06:03.746Z",
   "total": 1566,
   "records": [
     {
@@ -1293,7 +1293,7 @@
           },
           "2023": {
             "min_score": 670,
-            "min_rank": 31
+            "min_rank": null
           },
           "2024": {
             "min_score": 662,
@@ -5619,7 +5619,7 @@
           },
           "2023": {
             "min_score": 487,
-            "min_rank": 162003
+            "min_rank": null
           },
           "2024": {
             "min_score": 490,
@@ -5637,7 +5637,7 @@
           },
           "2023": {
             "min_score": 484,
-            "min_rank": 51059
+            "min_rank": null
           },
           "2024": {
             "min_score": 483,
@@ -20395,7 +20395,7 @@
           },
           "2023": {
             "min_score": 484,
-            "min_rank": 166487
+            "min_rank": null
           },
           "2024": {
             "min_score": 493,
@@ -20413,7 +20413,7 @@
           },
           "2023": {
             "min_score": 484,
-            "min_rank": 51059
+            "min_rank": null
           },
           "2024": {
             "min_score": 488,
@@ -33565,7 +33565,7 @@
           },
           "2023": {
             "min_score": 674,
-            "min_rank": 31
+            "min_rank": null
           },
           "2024": {
             "min_score": 665,
@@ -34063,7 +34063,7 @@
           },
           "2023": {
             "min_score": 548,
-            "min_rank": 77623
+            "min_rank": null
           },
           "2024": {
             "min_score": 544,
@@ -34081,7 +34081,7 @@
           },
           "2023": {
             "min_score": 519,
-            "min_rank": 28921
+            "min_rank": null
           },
           "2024": {
             "min_score": 516,
@@ -39361,7 +39361,7 @@
           },
           "2023": {
             "min_score": 530,
-            "min_rank": 100548
+            "min_rank": null
           },
           "2024": {
             "min_score": 532,
@@ -39379,7 +39379,7 @@
           },
           "2023": {
             "min_score": 507,
-            "min_rank": 35757
+            "min_rank": null
           },
           "2024": {
             "min_score": 510,
@@ -51493,7 +51493,7 @@
           },
           "2023": {
             "min_score": 517,
-            "min_rank": 118325
+            "min_rank": null
           },
           "2024": {
             "min_score": 517,
@@ -51511,7 +51511,7 @@
           },
           "2023": {
             "min_score": 500,
-            "min_rank": 40076
+            "min_rank": null
           },
           "2024": {
             "min_score": 503,
