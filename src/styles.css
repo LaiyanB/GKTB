@@ -676,6 +676,10 @@ th {
   animation: chart-fade-in 0.2s ease forwards;
 }
 
+.chart-pred-seg {
+  animation: chart-fade-in 0.3s ease forwards;
+}
+
 /* historical data points */
 .chart-point {
   opacity: 0;

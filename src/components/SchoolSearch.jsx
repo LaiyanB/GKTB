@@ -150,13 +150,13 @@ function SchoolRankChart({ subjectData, subject }) {
           />
         ))}
 
-        {/* dashed line: chart origin → prediction */}
-        {showPrediction && (
+        {/* prediction segment: last historical dot → 2025 prediction */}
+        {showPrediction && dots.length > 0 && (
           <line
-            x1={X_OFFSET} y1={Y_OFFSET + PLOT.H}
+            x1={dots[dots.length - 1].x} y1={dots[dots.length - 1].y}
             x2={predX} y2={predY}
-            stroke="#8b2c1f" strokeWidth="1.5" strokeDasharray="5,3"
-            className="chart-pred-baseline"
+            stroke="#8b2c1f" strokeWidth="2" strokeDasharray="6,4" strokeLinecap="round"
+            className="chart-pred-seg"
           />
         )}
 
