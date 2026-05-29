@@ -1,5 +1,5 @@
-export const RESULT_CARD_LIMIT = 20
-export const RESULT_TABLE_LIMIT = 300
+export const RESULT_CARD_LIMIT = 7
+export const RESULT_TABLE_LIMIT = 50
 
 export function getVisibleItems(items, limit) {
   const source = Array.isArray(items) ? items : []
