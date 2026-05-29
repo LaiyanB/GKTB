@@ -365,6 +365,14 @@ th {
   font-weight: 600;
 }
 
+.clickable-row {
+  cursor: pointer;
+  transition: background 0.15s;
+}
+.clickable-row:hover {
+  background: var(--accent-bg);
+}
+
 .draft-list {
   display: grid;
   gap: 10px;

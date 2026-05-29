@@ -1,0 +1,93 @@
+{
+  "admissions": 85883,
+  "score_segments": 3496,
+  "universities": 1567,
+  "missing_university_fields": {
+    "province": 0,
+    "city": 0
+  },
+  "missing_universities": {
+    "province": [],
+    "city": []
+  },
+  "static_tag_summary": {
+    "project_985_total": 39,
+    "is_985_true": 39,
+    "is_211_true": 108,
+    "is_double_first_class_true": 135,
+    "missing_project_985": []
+  },
+  "unknown_columns": [
+    "211",
+    "985",
+    "_211",
+    "_985",
+    "__EMPTY",
+    "__EMPTY_1",
+    "__EMPTY_10",
+    "__EMPTY_2",
+    "__EMPTY_3",
+    "__EMPTY_4",
+    "__EMPTY_5",
+    "__EMPTY_6",
+    "__EMPTY_7",
+    "__EMPTY_8",
+    "__EMPTY_9",
+    "一级学科",
+    "全国统一招生代码",
+    "双一流",
+    "学历类别",
+    "平均分",
+    "年份",
+    "排名区间",
+    "控制线(分)",
+    "最高分",
+    "本段人数(人)",
+    "生源地",
+    "累计人数(人)",
+    "软科排名",
+    "门类"
+  ],
+  "source_summary": {
+    "2021_专业分数线.xlsx / Sheet1": {
+      "total": 23510,
+      "admissions": 23510,
+      "score_segments": 0
+    },
+    "2022_一分一段表.xlsx / Sheet1": {
+      "total": 1162,
+      "admissions": 0,
+      "score_segments": 1162
+    },
+    "2022_专业分数线.xlsx / 高考分数线_加字段": {
+      "total": 26830,
+      "admissions": 26830,
+      "score_segments": 0
+    },
+    "2023_一分一段表.xlsx / Sheet1": {
+      "total": 1172,
+      "admissions": 0,
+      "score_segments": 1172
+    },
+    "2023_历史类_本科批_录取分数线.xlsx / Sheet1": {
+      "total": 5043,
+      "admissions": 5043,
+      "score_segments": 0
+    },
+    "2023_物理类_本科批_录取分数线.xlsx / Sheet1": {
+      "total": 12307,
+      "admissions": 12307,
+      "score_segments": 0
+    },
+    "2024_一分一段表.xlsx / Sheet1": {
+      "total": 1162,
+      "admissions": 0,
+      "score_segments": 1162
+    },
+    "2024_专业录取分数线_本科.xlsx / Sheet1": {
+      "total": 18194,
+      "admissions": 18193,
+      "score_segments": 0
+    }
+  }
+}

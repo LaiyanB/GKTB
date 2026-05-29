@@ -9,7 +9,7 @@ function Tags({ item }) {
   return tags.length ? tags.join(' / ') : '-'
 }
 
-export default function ResultTable({ rows }) {
+export default function ResultTable({ rows, onSelectSchool }) {
   const { visibleItems, hiddenCount } = getVisibleItems(rows, RESULT_TABLE_LIMIT)
 
   return (
@@ -36,7 +36,7 @@ export default function ResultTable({ rows }) {
           </thead>
           <tbody>
             {visibleItems.map((item) => (
-              <tr key={item.id}>
+              <tr key={item.id} className="clickable-row" onClick={function () { if (onSelectSchool) onSelectSchool(item.school) }}>
                 <td>{item.school}</td>
                 <td>{Tags({ item })}</td>
                 <td>{item.group}</td>

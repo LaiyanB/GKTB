@@ -165,7 +165,7 @@ export default function App() {
           <ResultColumn title="保" items={grouped.保} onAdd={addDraft} onSelectSchool={handleSelectSchool} />
         </section>
 
-        <ResultTable rows={rows} />
+        <ResultTable rows={rows} onSelectSchool={handleSelectSchool} />
         <DraftList draft={draft} onRemove={removeDraft} />
       </main>
     </div>
