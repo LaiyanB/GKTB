@@ -366,7 +366,7 @@ export default function SchoolSearch({ onSelectSchool }) {
     if (!q) return []
     var names = lowerNames.current
     var out = []
-    for (var i = 0; i < names.length && out.length < 20; i++) {
+    for (var i = 0; i < names.length && out.length < 10; i++) {
       if (names[i].indexOf(q) !== -1) out.push(schools[i])
     }
     return out
