@@ -130,10 +130,8 @@ input:focus, select:focus {
   background: var(--paper-2);
   border-right: 1px solid var(--line);
   padding: 14px 16px;
-  overflow-y: auto;
   position: sticky;
   top: 0;
-  height: 100vh;
   align-self: start;
 }
 
