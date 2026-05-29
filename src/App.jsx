@@ -9,7 +9,7 @@ import Sidebar from './components/Sidebar'
 import ResultColumn from './components/ResultColumn'
 import ResultTable from './components/ResultTable'
 import DraftList from './components/DraftList'
-import { SchoolDetail } from './components/SchoolSearch'
+import SchoolSearch, { SchoolDetail } from './components/SchoolSearch'
 
 export default function App() {
   const [loggedIn, setLoggedIn] = useState(false)
@@ -115,10 +115,11 @@ export default function App() {
         setOnly211={setOnly211}
         onlyDoubleFirstClass={onlyDoubleFirstClass}
         setOnlyDoubleFirstClass={setOnlyDoubleFirstClass}
-        onSelectSchool={setDetailSchool}
       />
 
       <main className="workspace">
+        <SchoolSearch onSelectSchool={setDetailSchool} />
+
         <header className="hero-card">
           <div>
             <p className="eyebrow">Offline Admissions Dataset</p>

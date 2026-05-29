@@ -1,6 +1,5 @@
 import { candidateCounts, cityOptions, majorOptions, subjectLabels } from '../data'
 import { formatNumber } from '../utils/predict'
-import SchoolSearch from './SchoolSearch'
 
 export default function Sidebar(props) {
   return (
@@ -47,7 +46,6 @@ export default function Sidebar(props) {
           <label><input type="checkbox" checked={props.onlyDoubleFirstClass} onChange={(event) => props.setOnlyDoubleFirstClass(event.target.checked)} /> 只看双一流</label>
         </div>
       </section>
-      <SchoolSearch onSelectSchool={props.onSelectSchool} />
     </aside>
   )
 }
