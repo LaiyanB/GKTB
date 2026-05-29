@@ -174,7 +174,7 @@ export default function App() {
         </section>
 
         <ResultTable rows={rows} onSelectSchool={handleSelectSchool} />
-        <DraftList draft={draft} onRemove={removeDraft} />
+        <DraftList draft={draft} onRemove={removeDraft} onSelectSchool={handleSelectSchool} />
       </main>
     </div>
   )
