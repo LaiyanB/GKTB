@@ -124,13 +124,16 @@ input:focus, select:focus {
   min-height: 100vh;
   display: grid;
   grid-template-columns: 250px minmax(0, 1fr);
-  align-items: start;
 }
 
 .sidebar {
   background: var(--paper-2);
   border-right: 1px solid var(--line);
   padding: 10px 12px;
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  overflow-y: auto;
 }
 
 .panel, .hero-card, .model-card, .table-card, .draft-card, .result-card, .result-column {
