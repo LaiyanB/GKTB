@@ -75,7 +75,6 @@ export default function App() {
       .map((item) => ({ ...item, ...forecastRecord(item) }))
       .map((item) => ({ ...item, ...classifyRecord(rank, item.predictedRank) }))
       .sort((a, b) => a.predictedRank - b.predictedRank)
-      .slice(0, 20)
   }, [sourceRecords, subject, city, major, publicOnly, noCoop, only985, only211, onlyDoubleFirstClass, rank])
 
   const grouped = {
