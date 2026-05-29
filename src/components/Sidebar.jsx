@@ -46,6 +46,32 @@ export default function Sidebar(props) {
           <label><input type="checkbox" checked={props.onlyDoubleFirstClass} onChange={(event) => props.setOnlyDoubleFirstClass(event.target.checked)} /> 只看双一流</label>
         </div>
       </section>
+
+      <section className="panel">
+        <div className="panel-title"><span>03</span><h2>自选院校</h2></div>
+        {(!props.favorites || props.favorites.length === 0) && (
+          <p className="sch-empty">点击院校旁的 ☆ 加入收藏</p>
+        )}
+        {props.favorites && props.favorites.length > 0 && (
+          <div className="fav-list">
+            {props.favorites.map(function (item, index) {
+              return (
+                <div className="fav-item" key={item.school || index}>
+                  <span className="fav-index">{index + 1}</span>
+                  <strong
+                    className="draft-school-name"
+                    onClick={function () { if (props.onSelectSchool) props.onSelectSchool(item.school) }}
+                  >{item.school}</strong>
+                  <button
+                    className="fav-remove"
+                    onClick={function () { if (props.onRemoveFavorite) props.onRemoveFavorite(item.school) }}
+                  >×</button>
+                </div>
+              )
+            })}
+          </div>
+        )}
+      </section>
     </aside>
   )
 }

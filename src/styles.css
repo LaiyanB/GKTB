@@ -541,6 +541,56 @@ th {
   border-color: #d4a017;
 }
 
+.fav-btn.favorited, .fav-btn-sm.favorited {
+  color: #d4a017;
+  border-color: #d4a017;
+  background: rgba(212, 160, 23, 0.1);
+}
+
+.fav-list {
+  display: grid;
+  gap: 4px;
+  margin-top: 6px;
+  max-height: 200px;
+  overflow-y: auto;
+}
+
+.fav-item {
+  display: grid;
+  grid-template-columns: 18px 1fr 18px;
+  align-items: center;
+  gap: 6px;
+  padding: 3px 6px;
+  border: 1px solid var(--line);
+  border-radius: 3px;
+  background: #fffaf1;
+  font-size: 12px;
+}
+
+.fav-index {
+  color: var(--muted);
+  font-size: 11px;
+  text-align: center;
+}
+
+.fav-remove {
+  width: 18px;
+  height: 18px;
+  border: none;
+  background: transparent;
+  color: var(--muted);
+  cursor: pointer;
+  font-size: 14px;
+  line-height: 1;
+  display: grid;
+  place-items: center;
+  border-radius: 2px;
+}
+.fav-remove:hover {
+  color: var(--danger);
+  background: rgba(139, 44, 31, 0.08);
+}
+
 .sch-result-tags {
   margin: 4px 0;
 }

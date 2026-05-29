@@ -299,7 +299,8 @@ export { SchoolBadges, SchoolDetail }
 
 // Memoized single result row — avoids re-rendering all rows on each keystroke
 var SchoolResultItem = (function () {
-  function SchoolResultItem({ school, onSelect, onFavorite }) {
+  function SchoolResultItem({ school, onSelect, onFavorite, isFavorited }) {
+    var favorited = isFavorited ? isFavorited(school.school) : false
     var subjKeys = Object.keys(school.subjects || {})
     var hasPhy = subjKeys.indexOf('physics') !== -1
     var hasHis = subjKeys.indexOf('history') !== -1
@@ -313,7 +314,7 @@ var SchoolResultItem = (function () {
           <strong>{school.school}</strong>
           <div className="sch-result-top-right">
             {onFavorite && (
-              <button className="fav-btn-sm" onClick={function (e) { e.stopPropagation(); onFavorite(school) }} title="加入自选院校">☆</button>
+              <button className={'fav-btn-sm' + (favorited ? ' favorited' : '')} onClick={function (e) { e.stopPropagation(); onFavorite(school) }} title={favorited ? '已加入自选院校' : '加入自选院校'}>{favorited ? '★' : '☆'}</button>
             )}
             <span className="sch-city">{school.province}{school.city ? ' ' + school.city : ''}</span>
           </div>
@@ -335,7 +336,7 @@ var SchoolResultItem = (function () {
   return SchoolResultItem
 })()
 
-export default function SchoolSearch({ onSelectSchool, onFavorite }) {
+export default function SchoolSearch({ onSelectSchool, onFavorite, isFavorited }) {
   var [schools, setSchools] = useState([])
   var [query, setQuery] = useState('')
   var inputRef = useRef(null)
@@ -404,7 +405,7 @@ export default function SchoolSearch({ onSelectSchool, onFavorite }) {
         {results.length > 0 && (
           <div className="sch-results">
             {results.map(function (s) {
-              return <SchoolResultItem key={s.school} school={s} onSelect={handleSelect} onFavorite={onFavorite} />
+              return <SchoolResultItem key={s.school} school={s} onSelect={handleSelect} onFavorite={onFavorite} isFavorited={isFavorited} />
             })}
           </div>
         )}

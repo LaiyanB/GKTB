@@ -100,6 +100,14 @@ export default function App() {
     setFavorites((current) => current.filter(function (item) { return item.school !== schoolName }))
   }
 
+  var favoritedSet = useMemo(function () {
+    return new Set(favorites.map(function (f) { return f.school }))
+  }, [favorites])
+
+  function isFavorited(schoolName) {
+    return favoritedSet.has(schoolName)
+  }
+
   function handleSelectSchool(schoolName) {
     var school = schoolMap[schoolName]
     if (school) setDetailSchool({ ...school })
@@ -110,6 +118,9 @@ export default function App() {
   return (
     <div className="app-shell">
       <Sidebar
+        favorites={favorites}
+        onRemoveFavorite={removeFavorite}
+        onSelectSchool={handleSelectSchool}
         subject={subject}
         setSubject={setSubject}
         score={score}
@@ -133,7 +144,7 @@ export default function App() {
       />
 
       <main className="workspace">
-        <SchoolSearch onSelectSchool={setDetailSchool} onFavorite={addFavorite} />
+        <SchoolSearch onSelectSchool={setDetailSchool} onFavorite={addFavorite} isFavorited={isFavorited} />
 
         <header className="hero-card">
           <div>
@@ -176,12 +187,11 @@ export default function App() {
         </section>
 
         <section className="result-grid">
-          <ResultColumn title="冲" items={grouped.冲} onAdd={addDraft} onSelectSchool={handleSelectSchool} onFavorite={addFavorite} />
-          <ResultColumn title="稳" items={grouped.稳} onAdd={addDraft} onSelectSchool={handleSelectSchool} onFavorite={addFavorite} />
-          <ResultColumn title="保" items={grouped.保} onAdd={addDraft} onSelectSchool={handleSelectSchool} onFavorite={addFavorite} />
+          <ResultColumn title="冲" items={grouped.冲} onAdd={addDraft} onSelectSchool={handleSelectSchool} onFavorite={addFavorite} isFavorited={isFavorited} />
+          <ResultColumn title="稳" items={grouped.稳} onAdd={addDraft} onSelectSchool={handleSelectSchool} onFavorite={addFavorite} isFavorited={isFavorited} />
+          <ResultColumn title="保" items={grouped.保} onAdd={addDraft} onSelectSchool={handleSelectSchool} onFavorite={addFavorite} isFavorited={isFavorited} />
         </section>
 
-        <DraftList draft={favorites} onRemove={removeFavorite} onSelectSchool={handleSelectSchool} title="自选院校" removeKey="school" />
         <DraftList draft={draft} onRemove={removeDraft} onSelectSchool={handleSelectSchool} />
       </main>
     </div>
