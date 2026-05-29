@@ -337,9 +337,9 @@ input:focus, select:focus {
 .fav-btn {
   width: 42px;
   height: 42px;
-  border: 1px solid var(--line);
+  border: 1px solid #d4a017;
   background: transparent;
-  color: var(--muted);
+  color: #d4a017;
   border-radius: 3px;
   cursor: pointer;
   font-size: 18px;
@@ -524,9 +524,9 @@ th {
 .fav-btn-sm {
   width: 24px;
   height: 24px;
-  border: 1px solid var(--line);
+  border: 1px solid #d4a017;
   background: transparent;
-  color: var(--muted);
+  color: #d4a017;
   border-radius: 3px;
   cursor: pointer;
   font-size: 14px;

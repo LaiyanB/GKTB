@@ -9,7 +9,7 @@ export default function DraftList({ draft, onRemove, onSelectSchool, title, remo
       {draft.length === 0 && <p className="empty-text">点击院校旁的 ☆ 加入{displayTitle}。</p>}
       <div className="draft-list">
         {draft.map((item, index) => (
-          <div className="draft-item" key={item.id}>
+          <div className="draft-item" key={item.school || item.id || index}>
             <span className="draft-index">{index + 1}</span>
             <div>
               <strong className="draft-school-name" onClick={function () { if (onSelectSchool) onSelectSchool(item.school) }}>{item.school}</strong>
