@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "vite build && node scripts/compress-data.mjs",
+    "build": "vite build",
     "preview": "vite preview",
     "inspect:data": "node scripts/inspect-workbooks.mjs",
     "normalize:data": "node scripts/normalize-workbooks.mjs",

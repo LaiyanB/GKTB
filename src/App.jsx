@@ -24,10 +24,8 @@ export default function App() {
   const [only985, setOnly985] = useState(false)
   const [only211, setOnly211] = useState(false)
   const [onlyDoubleFirstClass, setOnlyDoubleFirstClass] = useState(false)
-  const [favorites, setFavorites] = useState(function () {
-    var saved = localStorage.getItem('favorites')
-    return saved ? JSON.parse(saved) : []
-  })
+  const [favorites, setFavorites] = useState([])
+  const [user, setUser] = useState(null)
   const [showFavorites, setShowFavorites] = useState(false)
   const [exiting, setExiting] = useState(false)
   const [showSidebar, setShowSidebar] = useState(false)
@@ -35,10 +33,50 @@ export default function App() {
   const [schoolMap, setSchoolMap] = useState({})
   const detailRef = useRef(null)
 
-  // 收藏数据持久化到浏览器本地
+  // 从 Supabase 加载当前用户的收藏
+  async function loadUserFavorites() {
+    try {
+      var { data, error } = await supabase.auth.getUser()
+      if (error || !data.user) return
+      setUser(data.user)
+      var fav = await supabase.from('favorites').select('*').eq('user_id', data.user.id)
+      if (fav.data && fav.data.length > 0) {
+        setFavorites(fav.data)
+      } else {
+        // 尝试从 localStorage 恢复
+        var saved = localStorage.getItem('favorites')
+        if (saved) {
+          var parsed = JSON.parse(saved)
+          setFavorites(parsed)
+          // 同步到 Supabase
+          syncFavoritesToSupabase(data.user.id, parsed)
+        }
+      }
+    } catch {}
+  }
+
+  async function syncFavoritesToSupabase(uid, items) {
+    // 删除旧的，插入新的
+    await supabase.from('favorites').delete().eq('user_id', uid)
+    if (items.length > 0) {
+      var rows = items.map(function (f) { return {
+        user_id: uid,
+        school: f.school,
+        major: f.major || null,
+        level: f.level || null,
+        note: f.note || null
+      }})
+      await supabase.from('favorites').insert(rows)
+    }
+  }
+
+  // 收藏变动时保存到 localStorage + Supabase
   useEffect(function () {
     localStorage.setItem('favorites', JSON.stringify(favorites))
-  }, [favorites])
+    if (user) {
+      syncFavoritesToSupabase(user.id, favorites)
+    }
+  }, [favorites, user])
 
   useEffect(function () {
     if (detailSchool && detailRef.current) {
@@ -48,11 +86,12 @@ export default function App() {
 
   useEffect(function checkSession() {
     supabase.auth.getSession().then(function (result) {
-      if (result.data.session) setLoggedIn(true)
+      if (result.data.session) { setLoggedIn(true); loadUserFavorites() }
     })
 
     var { data: listener } = supabase.auth.onAuthStateChange(function (event, session) {
       setLoggedIn(!!session)
+      if (session) loadUserFavorites()
     })
 
     return function () {
@@ -122,9 +161,9 @@ export default function App() {
 
   function toggleFavorite(item) {
     setFavorites(function (current) {
-      var exists = current.some(function (entry) { return entry.school === item.school })
-      if (exists) return current.filter(function (entry) { return entry.school !== item.school })
-      return [...current, item]
+      var exists = current.some(function (entry) { return entry.school === item.school && entry.major === item.major })
+      if (exists) return current.filter(function (entry) { return !(entry.school === item.school && entry.major === item.major) })
+      return [...current, { school: item.school, major: item.major || '', level: item.level, note: item.note }]
     })
   }
 

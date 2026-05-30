@@ -3,4 +3,7 @@ dist/
 .vite/
 .reasonix/
 scripts/deploy-*.mjs
+scripts/sql-batch-*.sql
+scripts/import-all.sql
+scripts/import-calls.json
 .vercel
