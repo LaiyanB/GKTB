@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { records as mockRecords, subjectLabels } from './data'
 import { classifyRecord, forecastRecord, formatNumber } from './utils/predict'
-import { adaptAdmissions } from './utils/adaptAdmissions'
+import { adaptAdmissions, simplifyMajor } from './utils/adaptAdmissions'
 import { useOfflineAdmissions } from './hooks/useOfflineAdmissions'
 import { useScoreSegments } from './hooks/useScoreSegments'
 import Login from './components/Login'
@@ -141,7 +141,7 @@ export default function App() {
     for (var i = 0; i < sourceRecords.length; i++) {
       var r = sourceRecords[i]
       if (r.school !== name) continue
-      var key = (r.subject || '') + '::' + (r.group || '') + '::' + (r.major || '')
+      var key = (r.subject || '') + '::' + simplifyMajor(r.major || '')
       if (!groups.has(key)) {
         groups.set(key, {
           subject: r.subject,
@@ -149,6 +149,7 @@ export default function App() {
           major: r.major,
           direction: r.direction,
           ranks: { ...(r.ranks || {}) },
+          scores: { ...(r.scores || {}) },
           predictedRank: r.predictedRank,
           predictedRate: r.predictedRate,
           level: r.level
@@ -159,6 +160,7 @@ export default function App() {
           Object.keys(r.ranks).forEach(function (y) {
             if (!(y in existing.ranks) || r.ranks[y] < existing.ranks[y]) {
               existing.ranks[y] = r.ranks[y]
+              if (r.scores && r.scores[y] != null) existing.scores[y] = r.scores[y]
             }
           })
         }
@@ -219,64 +221,66 @@ export default function App() {
         <div key={showFavorites ? 'fav' : (detailSchool ? 'detail' : 'main')} className={'workspace-content' + (exiting ? ' exiting' : '')}>
           {showFavorites ? (
             <FavoritesPage
-            favorites={favorites}
-            onRemove={removeFavorite}
-            onReorder={reorderFavorites}
-            onClear={clearFavorites}
-            onSelectSchool={handleSelectSchool}
-            onFavorite={toggleFavorite}
-            isFavorited={isFavorited}
-          />
-        ) : (
-          <>
-            <SchoolSearch onSelectSchool={setDetailSchool} onFavorite={toggleFavorite} isFavorited={isFavorited} />
+              favorites={favorites}
+              onRemove={removeFavorite}
+              onReorder={reorderFavorites}
+              onClear={clearFavorites}
+              onSelectSchool={handleSelectSchool}
+              onFavorite={toggleFavorite}
+              isFavorited={isFavorited}
+            />
+          ) : (
+            <>
+              <SchoolSearch onSelectSchool={function (schoolObj) { setDetailSchool({ ...schoolObj, _name: schoolObj.school }) }} onFavorite={toggleFavorite} isFavorited={isFavorited} />
 
-            <header className="hero-card">
-          <div>
-            <p className="eyebrow">Offline Admissions Dataset</p>
-            <h2>冲稳保推荐工作台</h2>
-            <p>
-              {offline.status === 'ready'
-                ? `当前已接入离线 admissions.json，共加载 ${offline.records.length} 条原始记录。`
-                : '当前仍在使用 mock 数据。生成 admissions.json 后会自动切换为真实离线数据。'}
-            </p>
-          </div>
+              {detailSchool ? (
+                <section className="detail-card" ref={detailRef}>
+                  <div className="detail-card-head">
+                    <h2>院校详情</h2>
+                  </div>
+                  <SchoolDetail school={detailSchool} majors={detailMajors} onClose={function () { setDetailSchool(null) }} />
+                </section>
+              ) : (
+                <>
+                  <header className="hero-card">
+                    <div>
+                      <p className="eyebrow">Offline Admissions Dataset</p>
+                      <h2>冲稳保推荐工作台</h2>
+                      <p>
+                        {offline.status === 'ready'
+                          ? `当前已接入离线 admissions.json，共加载 ${offline.records.length} 条原始记录。`
+                          : '当前仍在使用 mock 数据。生成 admissions.json 后会自动切换为真实离线数据。'}
+                      </p>
+                    </div>
 
-          <div className="hero-metrics">
-            <div><span>科类</span><strong>{subjectLabels[subject]}</strong></div>
-            <div><span>排位</span><strong>{formatNumber(rank)}</strong></div>
-            <div><span>结果</span><strong>{rows.length}</strong></div>
-          </div>
-        </header>
+                    <div className="hero-metrics">
+                      <div><span>科类</span><strong>{subjectLabels[subject]}</strong></div>
+                      <div><span>排位</span><strong>{formatNumber(rank)}</strong></div>
+                      <div><span>结果</span><strong>{rows.length}</strong></div>
+                    </div>
+                  </header>
 
-        {detailSchool && (
-          <section className="detail-card" ref={detailRef}>
-            <div className="detail-card-head">
-              <h2>院校详情</h2>
-            </div>
-            <SchoolDetail school={detailSchool} majors={detailMajors} onClose={function () { setDetailSchool(null) }} />
-          </section>
-        )}
+                  <section className="model-card">
+                    <p className="eyebrow">Weighted Residual Forecasting</p>
+                    <h2>同科类排位占比 + 加权残差预测</h2>
+                    <p>历年最低排位先除以当年同科类考生人数，得到排位占比。再用最近一年为主的加权平均作为基准，叠加保守趋势修正。数据不足四年时，系统会自动按可用年份重算权重。</p>
+                    <div className="model-steps">
+                      <span>基准 0.78 / 0.14 / 0.06 / 0.02</span>
+                      <span>趋势 0.80 / 0.15 / 0.05</span>
+                      <span>修正系数 0.20</span>
+                      <span>冲稳保界限 5%</span>
+                    </div>
+                  </section>
 
-        <section className="model-card">
-          <p className="eyebrow">Weighted Residual Forecasting</p>
-          <h2>同科类排位占比 + 加权残差预测</h2>
-          <p>历年最低排位先除以当年同科类考生人数，得到排位占比。再用最近一年为主的加权平均作为基准，叠加保守趋势修正。数据不足四年时，系统会自动按可用年份重算权重。</p>
-          <div className="model-steps">
-            <span>基准 0.78 / 0.14 / 0.06 / 0.02</span>
-            <span>趋势 0.80 / 0.15 / 0.05</span>
-            <span>修正系数 0.20</span>
-            <span>冲稳保界限 5%</span>
-          </div>
-        </section>
-
-        <section className="result-grid">
-          <ResultColumn title="冲" items={grouped.冲} onSelectSchool={handleSelectSchool} onFavorite={toggleFavorite} isFavorited={isFavorited} />
-          <ResultColumn title="稳" items={grouped.稳} onSelectSchool={handleSelectSchool} onFavorite={toggleFavorite} isFavorited={isFavorited} />
-          <ResultColumn title="保" items={grouped.保} onSelectSchool={handleSelectSchool} onFavorite={toggleFavorite} isFavorited={isFavorited} />
-        </section>
-          </>
-        )}
+                  <section className="result-grid">
+                    <ResultColumn title="冲" items={grouped.冲} onSelectSchool={handleSelectSchool} onFavorite={toggleFavorite} isFavorited={isFavorited} />
+                    <ResultColumn title="稳" items={grouped.稳} onSelectSchool={handleSelectSchool} onFavorite={toggleFavorite} isFavorited={isFavorited} />
+                    <ResultColumn title="保" items={grouped.保} onSelectSchool={handleSelectSchool} onFavorite={toggleFavorite} isFavorited={isFavorited} />
+                  </section>
+                </>
+              )}
+            </>
+          )}
         </div>
 
       </main>

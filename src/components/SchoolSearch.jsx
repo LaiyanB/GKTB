@@ -302,9 +302,8 @@ function SchoolDetail({ school, onClose, majors }) {
           <table className="sch-table sch-majors-table">
             <thead>
               <tr>
-                <th>专业组</th>
                 <th>专业</th>
-                {years.map(function (y) { return <th key={y}>{y}排位</th> })}
+                {years.map(function (y) { return <th key={y}>{y} 分数 / 排位</th> })}
                 <th>预测排位</th>
                 <th>分层</th>
               </tr>
@@ -313,11 +312,11 @@ function SchoolDetail({ school, onClose, majors }) {
               {filteredMajors.map(function (m, idx) {
                 return (
                   <tr key={idx}>
-                    <td>{m.group}</td>
                     <td>{m.major}</td>
                     {years.map(function (y) {
                       var r = m.ranks[y]
-                      return <td key={y}>{r ? formatNumber(r) : '-'}</td>
+                      var s = m.scores && m.scores[y]
+                      return <td key={y}>{r ? (s ? s + ' / ' + formatNumber(r) : formatNumber(r)) : (s || '-')}</td>
                     })}
                     <td><strong>{m.predictedRank ? formatNumber(m.predictedRank) : '-'}</strong></td>
                     <td><span className={'badge ' + (m.level || '稳')}>{m.level || '-'}</span></td>

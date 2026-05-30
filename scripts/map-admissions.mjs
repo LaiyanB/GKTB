@@ -125,7 +125,7 @@ function patchedLocation(school) {
   return patch ? { province: patch[0], city: patch[1] } : { province: '', city: '' }
 }
 
-const admissions = []
+let admissions = []
 const scoreSegments = []
 const universities = new Map()
 const unknownColumns = new Set()
@@ -267,6 +267,15 @@ for (const record of raw.records) {
     source_sheet: record.source_sheet
   })
   sourceSummary[sourceKey].admissions += 1
+}
+
+// 过滤掉专科批次数据
+// 原因：2021/2022 原始数据包含专科批，而 2023/2024 仅有本科批，
+// 保留专科批会导致大量院校在后两年"消失"，前端表格大片空白
+const filteredCount = admissions.filter(r => r.batch === '专科批').length
+if (filteredCount > 0) {
+  admissions = admissions.filter(r => r.batch !== '专科批')
+  console.log(`已过滤 ${filteredCount} 条专科批记录，剩余 ${admissions.length} 条`)
 }
 
 for (const school of PROJECT_985) collectUniversity(school)
