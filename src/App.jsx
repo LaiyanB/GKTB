@@ -44,15 +44,23 @@ export default function App() {
         setFavorites(fav.data)
       } else {
         // 尝试从 localStorage 恢复
-        var saved = localStorage.getItem('favorites')
-        if (saved) {
-          var parsed = JSON.parse(saved)
-          setFavorites(parsed)
-          // 同步到 Supabase
-          syncFavoritesToSupabase(data.user.id, parsed)
+        try {
+          var saved = localStorage.getItem('favorites')
+          if (saved) {
+            var parsed = JSON.parse(saved)
+            if (Array.isArray(parsed) && parsed.length > 0) {
+              setFavorites(parsed)
+              syncFavoritesToSupabase(data.user.id, parsed)
+            }
+          }
+        } catch (e) {
+          console.warn('localStorage 收藏数据读取失败，已忽略', e)
+          localStorage.removeItem('favorites')
         }
       }
-    } catch {}
+    } catch (e) {
+      console.error('加载收藏失败', e)
+    }
   }
 
   async function syncFavoritesToSupabase(uid, items) {
