@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef, useState, useDeferredValue } from 'react'
+import React, { useEffect, useMemo, useRef, useState, useDeferredValue } from 'react'
 import { formatNumber, forecastSchool } from '../utils/predict'
 
 const SUBJECT_LABELS = { physics: '物理类', history: '历史类' }
@@ -258,6 +258,7 @@ function SchoolDetail({ school, onClose, majors }) {
   }, [majorList, activeSubject])
 
   var years = ['2024', '2023', '2022', '2021']
+  var [expandedMajor, setExpandedMajor] = useState(null)
 
   return (
     <div className="sch-detail">
@@ -310,17 +311,29 @@ function SchoolDetail({ school, onClose, majors }) {
             </thead>
             <tbody>
               {filteredMajors.map(function (m, idx) {
+                var majorSubjectData = {}
+                Object.keys(m.ranks || {}).forEach(function (y) { majorSubjectData[y] = { min_rank: m.ranks[y] } })
+                var isExpanded = expandedMajor === idx
                 return (
-                  <tr key={idx}>
-                    <td>{m.major}</td>
-                    {years.map(function (y) {
-                      var r = m.ranks[y]
-                      var s = m.scores && m.scores[y]
-                      return <td key={y}>{r ? (s ? s + ' / ' + formatNumber(r) : formatNumber(r)) : (s || '-')}</td>
-                    })}
-                    <td><strong>{m.predictedRank ? formatNumber(m.predictedRank) : '-'}</strong></td>
-                    <td><span className={'badge ' + (m.level || '稳')}>{m.level || '-'}</span></td>
-                  </tr>
+                  <React.Fragment key={idx}>
+                    <tr onClick={function () { setExpandedMajor(isExpanded ? null : idx) }} style={{ cursor: 'pointer' }} className={isExpanded ? 'major-row-expanded' : ''}>
+                      <td>{m.major}</td>
+                      {years.map(function (y) {
+                        var r = m.ranks[y]
+                        var s = m.scores && m.scores[y]
+                        return <td key={y}>{r ? (s ? s + ' / ' + formatNumber(r) : formatNumber(r)) : (s || '-')}</td>
+                      })}
+                      <td><strong>{m.predictedRank ? formatNumber(m.predictedRank) : '-'}</strong></td>
+                      <td><span className={'badge ' + (m.level || '稳')}>{m.level || '-'}</span></td>
+                    </tr>
+                    {isExpanded && (
+                      <tr className="major-chart-row">
+                        <td colSpan={7} style={{ padding: 0 }}>
+                          <SchoolRankChart subjectData={majorSubjectData} subject={m.subject} />
+                        </td>
+                      </tr>
+                    )}
+                  </React.Fragment>
                 )
               })}
             </tbody>
