@@ -109,11 +109,13 @@ export default function Login({ onLogin }) {
         {/* 切换标签 */}
         <div className="login-tabs">
           <button
-            className={'login-tab' + (tab === 'otp' ? ' active' : '')}
+            type="button"
+            className={tab === 'otp' ? 'login-tab active' : 'login-tab'}
             onClick={function () { setTab('otp'); resetOtp() }}
           >验证码登录</button>
           <button
-            className={'login-tab' + (tab === 'password' ? ' active' : '')}
+            type="button"
+            className={tab === 'password' ? 'login-tab active' : 'login-tab'}
             onClick={function () { setTab('password'); resetOtp() }}
           >密码登录</button>
         </div>
