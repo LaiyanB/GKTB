@@ -804,9 +804,12 @@ th {
 
 @media (max-width: 640px) {
   .workspace { padding: 12px; gap: 14px; margin-left: 0; }
-  .hero-card { padding: 16px; }
+  .hero-card { padding: 12px; }
   .hero-metrics { grid-template-columns: 1fr; }
   .table-card, .draft-card { padding: 12px; }
+  .detail-card { padding: 14px; }
+  .model-card { padding: 14px; }
+  .fav-actions { flex-wrap: wrap; gap: 6px; }
   th, td { padding: 8px 6px; font-size: 13px; }
 
   .hamburger-btn {
@@ -858,6 +861,65 @@ th {
   .sidebar-backdrop.visible {
     opacity: 1;
     pointer-events: auto;
+  }
+
+  /* ===== 结果网格单列 ===== */
+  .result-grid {
+    grid-template-columns: 1fr;
+  }
+  .result-column {
+    padding: 10px;
+  }
+
+  /* ===== 触摸目标放大 ≥44px ===== */
+  input, select {
+    height: 44px;
+  }
+
+  .fav-btn-sm {
+    width: 36px;
+    height: 36px;
+    font-size: 18px;
+  }
+
+  .sch-tab {
+    height: 44px;
+    font-size: 15px;
+  }
+
+  .sch-close {
+    width: 36px;
+    height: 36px;
+    font-size: 20px;
+  }
+
+  .fav-action-btn {
+    height: 44px;
+    padding: 0 16px;
+    font-size: 14px;
+  }
+
+  .reorder-btn {
+    width: 40px;
+    height: 40px;
+    font-size: 16px;
+  }
+
+  .fav-card-remove {
+    width: 36px;
+    height: 36px;
+    font-size: 20px;
+  }
+
+  .workspace-back {
+    width: 36px;
+    height: 36px;
+    left: 8px;
+    font-size: 18px;
+  }
+
+  .login-card button {
+    height: 44px;
   }
 }
 
