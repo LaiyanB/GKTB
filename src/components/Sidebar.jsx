@@ -19,7 +19,7 @@ export default function Sidebar(props) {
           <option value="history">历史类</option>
         </select>
         <label>高考分数</label>
-        <input value={props.score} onChange={(event) => props.setScore(event.target.value)} />
+        <input type="number" min="0" max="750" value={props.score} onChange={(event) => props.setScore(event.target.value)} />
         <label>全省排位</label>
         <input value={props.rank} onChange={(event) => props.setRank(event.target.value)} />
         <div className="mini-metric">

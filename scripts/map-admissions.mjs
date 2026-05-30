@@ -82,6 +82,10 @@ function subject(value, fallback) {
   return fallback
 }
 
+function normalizeCity(value) {
+  return String(value || '').replace(/市$/, '').trim()
+}
+
 function inferCity(school) {
   const text = String(school || '')
   if (text.includes('深圳')) return '深圳'
@@ -238,7 +242,7 @@ for (const record of raw.records) {
 
   const location = patchedLocation(school)
   const province = first(provinceField, location.province)
-  const city = first(cityField, location.city, inferCity(school))
+  const city = normalizeCity(first(cityField, location.city, inferCity(school)))
   const tags = staticTags(school)
 
   collectUniversity(rawSchool, { province, city })
