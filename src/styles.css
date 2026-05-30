@@ -120,6 +120,43 @@ input:focus, select:focus {
   margin-top: 20px;
 }
 
+.login-error {
+  background: rgba(139, 44, 31, 0.08);
+  border: 1px solid rgba(139, 44, 31, 0.2);
+  color: var(--danger);
+  padding: 10px 12px;
+  border-radius: 3px;
+  font-size: 13px;
+  margin-bottom: 4px;
+  line-height: 1.5;
+}
+
+.login-switch {
+  text-align: center;
+  margin: 16px 0 0;
+  font-size: 13px;
+  color: var(--muted);
+}
+
+.link-btn {
+  background: none;
+  border: none;
+  color: var(--accent);
+  cursor: pointer;
+  font-size: 13px;
+  padding: 0;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+.link-btn:hover {
+  color: var(--ink);
+}
+
+.login-card button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
 .app-shell {
   min-height: 100vh;
 }

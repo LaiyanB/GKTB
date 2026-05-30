@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
+
 import { records as mockRecords, subjectLabels } from './data'
 import { classifyRecord, forecastRecord, formatNumber } from './utils/predict'
 import { adaptAdmissions, simplifyMajor } from './utils/adaptAdmissions'
@@ -9,6 +10,7 @@ import Sidebar from './components/Sidebar'
 import ResultColumn from './components/ResultColumn'
 import FavoritesPage from './components/FavoritesPage'
 import SchoolSearch, { SchoolDetail } from './components/SchoolSearch'
+import { supabase } from './supabase'
 
 export default function App() {
   const [loggedIn, setLoggedIn] = useState(false)
@@ -35,6 +37,20 @@ export default function App() {
       detailRef.current.scrollIntoView({ behavior: 'smooth', block: 'start' })
     }
   }, [detailSchool])
+
+  useEffect(function checkSession() {
+    supabase.auth.getSession().then(function (result) {
+      if (result.data.session) setLoggedIn(true)
+    })
+
+    var { data: listener } = supabase.auth.onAuthStateChange(function (event, session) {
+      setLoggedIn(!!session)
+    })
+
+    return function () {
+      if (listener && listener.subscription) listener.subscription.unsubscribe()
+    }
+  }, [])
 
   const offline = useOfflineAdmissions()
   const { lookupRank, status: segStatus } = useScoreSegments()
