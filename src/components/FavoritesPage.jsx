@@ -29,7 +29,7 @@ function copyList(favorites) {
   )
 }
 
-export default function FavoritesPage({ favorites, onRemove, onReorder, onClear, onSelectSchool, onFavorite, isFavorited, onClose }) {
+export default function FavoritesPage({ favorites, onRemove, onReorder, onClear, onSort, onSelectSchool, onFavorite, isFavorited, onClose }) {
   const [dragIndex, setDragIndex] = useState(null)
 
   const handleDragStart = useCallback(function (e, index) {
@@ -78,6 +78,7 @@ export default function FavoritesPage({ favorites, onRemove, onReorder, onClear,
       <StatsBar favorites={favorites} />
 
       <div className="fav-actions">
+        <button className="fav-action-btn" onClick={function () { if (onSort) onSort() }}>🔀 自动排序（冲→稳→保）</button>
         <button className="fav-action-btn" onClick={function () { copyList(favorites) }}>📋 复制名单</button>
         <button className="fav-action-btn danger" onClick={function () {
           if (confirm('确定要清空全部 ' + favorites.length + ' 所自选院校吗？')) { onClear() }

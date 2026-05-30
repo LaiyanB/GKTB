@@ -25,6 +25,7 @@ export default function App() {
   const [favorites, setFavorites] = useState([])
   const [showFavorites, setShowFavorites] = useState(false)
   const [exiting, setExiting] = useState(false)
+  const [showSidebar, setShowSidebar] = useState(false)
   const [detailSchool, setDetailSchool] = useState(null)
   const [schoolMap, setSchoolMap] = useState({})
   const detailRef = useRef(null)
@@ -116,6 +117,20 @@ export default function App() {
     })
   }
 
+  function sortFavorites() {
+    setFavorites(function (current) {
+      var levelOrder = { '冲': 0, '稳': 1, '保': 2 }
+      var copy = current.slice()
+      copy.sort(function (a, b) {
+        var la = levelOrder[a.level] ?? 9
+        var lb = levelOrder[b.level] ?? 9
+        if (la !== lb) return la - lb
+        return (a.predictedRank || 999999) - (b.predictedRank || 999999)
+      })
+      return copy
+    })
+  }
+
   function clearFavorites() {
     setFavorites([])
   }
@@ -201,9 +216,14 @@ export default function App() {
         setOnly211={setOnly211}
         onlyDoubleFirstClass={onlyDoubleFirstClass}
         setOnlyDoubleFirstClass={setOnlyDoubleFirstClass}
+        showSidebar={showSidebar}
+        onCloseSidebar={function () { setShowSidebar(false) }}
       />
 
       <main className="workspace">
+        <button className="hamburger-btn" onClick={function () { setShowSidebar(function (v) { return !v }) }} aria-label="展开筛选面板">
+          ☰
+        </button>
         <button
           className={'workspace-back' + (showFavorites || detailSchool ? ' visible' : '') + (exiting ? ' exiting' : '')}
           onClick={function () {
@@ -225,6 +245,7 @@ export default function App() {
               onRemove={removeFavorite}
               onReorder={reorderFavorites}
               onClear={clearFavorites}
+              onSort={sortFavorites}
               onSelectSchool={handleSelectSchool}
               onFavorite={toggleFavorite}
               isFavorited={isFavorited}

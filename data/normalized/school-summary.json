@@ -1,6 +1,6 @@
 {
-  "generated_at": "2026-05-30T12:04:43.232Z",
-  "total": 1022,
+  "generated_at": "2026-05-30T12:21:34.936Z",
+  "total": 1016,
   "records": [
     {
       "school": "安徽财经大学",
@@ -430,8 +430,8 @@
             "min_rank": 48296
           },
           "2024": {
-            "min_score": 530,
-            "min_rank": 99483
+            "min_score": 582,
+            "min_rank": 36096
           }
         },
         "history": {
@@ -1956,8 +1956,8 @@
       "subjects": {
         "physics": {
           "2021": {
-            "min_score": 586,
-            "min_rank": 34285
+            "min_score": 588,
+            "min_rank": 32656
           },
           "2022": {
             "min_score": 584,
@@ -1986,8 +1986,8 @@
             "min_rank": 39412
           },
           "2024": {
-            "min_score": 521,
-            "min_rank": 27268
+            "min_score": 525,
+            "min_rank": 25307
           }
         }
       }
@@ -8288,18 +8288,18 @@
             "min_rank": 95185
           },
           "2024": {
-            "min_score": 520,
-            "min_rank": 115067
+            "min_score": 525,
+            "min_rank": 107192
           }
         },
         "history": {
           "2021": {
-            "min_score": 453,
-            "min_rank": 90887
+            "min_score": 530,
+            "min_rank": 29773
           },
           "2022": {
-            "min_score": 466,
-            "min_rank": 71864
+            "min_score": 505,
+            "min_rank": 37760
           },
           "2023": {
             "min_score": 484,
@@ -8478,8 +8478,8 @@
         },
         "history": {
           "2021": {
-            "min_score": 516,
-            "min_rank": 38979
+            "min_score": 518,
+            "min_rank": 37599
           },
           "2022": {
             "min_score": 509,
@@ -9838,24 +9838,6 @@
       "is_211": false,
       "is_double_first_class": false,
       "subjects": {
-        "physics": {
-          "2021": {
-            "min_score": 478,
-            "min_rank": 164841
-          },
-          "2022": {
-            "min_score": 491,
-            "min_rank": 157766
-          },
-          "2023": {
-            "min_score": 492,
-            "min_rank": 154541
-          },
-          "2024": {
-            "min_score": 490,
-            "min_rank": 166414
-          }
-        },
         "history": {
           "2021": {
             "min_score": 499,
@@ -13198,22 +13180,6 @@
           "2024": {
             "min_score": 499,
             "min_rank": 39924
-          }
-        }
-      }
-    },
-    {
-      "school": "湖北美术学院",
-      "province": "湖北",
-      "city": "武汉",
-      "is_985": false,
-      "is_211": false,
-      "is_double_first_class": false,
-      "subjects": {
-        "history": {
-          "2024": {
-            "min_score": 503,
-            "min_rank": 37388
           }
         }
       }
@@ -17956,16 +17922,16 @@
             "min_rank": 124875
           },
           "2022": {
-            "min_score": 494,
-            "min_rank": 152792
+            "min_score": 516,
+            "min_rank": 118575
           },
           "2023": {
-            "min_score": 497,
-            "min_rank": 147047
+            "min_score": 509,
+            "min_rank": 129612
           },
           "2024": {
-            "min_score": 490,
-            "min_rank": 166414
+            "min_score": 508,
+            "min_rank": 134715
           }
         }
       }
@@ -18122,8 +18088,8 @@
             "min_rank": 38979
           },
           "2022": {
-            "min_score": 441,
-            "min_rank": 97115
+            "min_score": 508,
+            "min_rank": 35492
           },
           "2023": {
             "min_score": 532,
@@ -22016,8 +21982,8 @@
       "subjects": {
         "history": {
           "2021": {
-            "min_score": 558,
-            "min_rank": 15132
+            "min_score": 559,
+            "min_rank": 14724
           },
           "2022": {
             "min_score": 545,
@@ -23475,22 +23441,6 @@
       }
     },
     {
-      "school": "黔南民族师范学院",
-      "province": "贵州",
-      "city": "黔南布依族苗族自治州",
-      "is_985": false,
-      "is_211": false,
-      "is_double_first_class": false,
-      "subjects": {
-        "physics": {
-          "2021": {
-            "min_score": 482,
-            "min_rank": 159425
-          }
-        }
-      }
-    },
-    {
       "school": "青岛城市学院",
       "province": "山东",
       "city": "青岛",
@@ -23966,8 +23916,8 @@
             "min_rank": 154541
           },
           "2024": {
-            "min_score": 502,
-            "min_rank": 145112
+            "min_score": 503,
+            "min_rank": 143405
           }
         },
         "history": {
@@ -27142,8 +27092,8 @@
       "subjects": {
         "physics": {
           "2021": {
-            "min_score": 600,
-            "min_rank": 23749
+            "min_score": 605,
+            "min_rank": 20612
           }
         },
         "history": {
@@ -27152,8 +27102,8 @@
             "min_rank": 4465
           },
           "2022": {
-            "min_score": 576,
-            "min_rank": 5055
+            "min_score": 581,
+            "min_rank": 4148
           },
           "2023": {
             "min_score": 570,
@@ -27162,36 +27112,6 @@
           "2024": {
             "min_score": 561,
             "min_rank": 11135
-          }
-        }
-      }
-    },
-    {
-      "school": "上海音乐学院",
-      "province": "上海",
-      "city": "上海",
-      "is_985": false,
-      "is_211": false,
-      "is_double_first_class": true,
-      "subjects": {
-        "physics": {
-          "2022": {
-            "min_score": 590,
-            "min_rank": 29634
-          }
-        },
-        "history": {
-          "2022": {
-            "min_score": 581,
-            "min_rank": 4148
-          },
-          "2023": {
-            "min_score": 576,
-            "min_rank": 7735
-          },
-          "2024": {
-            "min_score": 560,
-            "min_rank": 11455
           }
         }
       }
@@ -28327,23 +28247,9 @@
       "is_double_first_class": false,
       "subjects": {
         "history": {
-          "2023": {
-            "min_score": 538,
-            "min_rank": 20110
-          },
           "2024": {
-            "min_score": 521,
-            "min_rank": 27268
-          }
-        },
-        "physics": {
-          "2023": {
-            "min_score": 542,
-            "min_rank": 85016
-          },
-          "2024": {
-            "min_score": 539,
-            "min_rank": 85894
+            "min_score": 524,
+            "min_rank": 25793
           }
         }
       }
@@ -28414,12 +28320,12 @@
             "min_rank": 1881
           },
           "2023": {
-            "min_score": 578,
-            "min_rank": 7286
+            "min_score": 609,
+            "min_rank": 2362
           },
           "2024": {
-            "min_score": 590,
-            "min_rank": 4523
+            "min_score": 610,
+            "min_rank": 1921
           }
         }
       }
@@ -28484,8 +28390,8 @@
             "min_rank": 146998
           },
           "2022": {
-            "min_score": 496,
-            "min_rank": 149578
+            "min_score": 502,
+            "min_rank": 140151
           },
           "2023": {
             "min_score": 478,
@@ -28502,8 +28408,8 @@
             "min_rank": 47610
           },
           "2022": {
-            "min_score": 493,
-            "min_rank": 47145
+            "min_score": 495,
+            "min_rank": 45435
           },
           "2023": {
             "min_score": 481,
@@ -28630,30 +28536,30 @@
       "subjects": {
         "physics": {
           "2021": {
-            "min_score": 552,
-            "min_rank": 67840
+            "min_score": 559,
+            "min_rank": 60150
           },
           "2022": {
             "min_score": 551,
             "min_rank": 69968
           },
           "2023": {
-            "min_score": 540,
-            "min_rank": 87519
+            "min_score": 556,
+            "min_rank": 68260
           },
           "2024": {
-            "min_score": 519,
-            "min_rank": 116687
+            "min_score": 539,
+            "min_rank": 85894
           }
         },
         "history": {
           "2022": {
-            "min_score": 533,
-            "min_rank": 20142
+            "min_score": 541,
+            "min_rank": 16405
           },
           "2023": {
-            "min_score": 533,
-            "min_rank": 22322
+            "min_score": 549,
+            "min_rank": 15723
           },
           "2024": {
             "min_score": 500,
@@ -28948,16 +28854,16 @@
             "min_rank": 32882
           },
           "2022": {
-            "min_score": 512,
-            "min_rank": 32701
+            "min_score": 515,
+            "min_rank": 30756
           },
           "2023": {
-            "min_score": 483,
-            "min_rank": 51820
+            "min_score": 499,
+            "min_rank": 40725
           },
           "2024": {
-            "min_score": 496,
-            "min_rank": 41843
+            "min_score": 509,
+            "min_rank": 33779
           }
         }
       }
@@ -29709,22 +29615,6 @@
       }
     },
     {
-      "school": "天津美术学院",
-      "province": "天津",
-      "city": "天津",
-      "is_985": false,
-      "is_211": false,
-      "is_double_first_class": false,
-      "subjects": {
-        "history": {
-          "2024": {
-            "min_score": 506,
-            "min_rank": 35531
-          }
-        }
-      }
-    },
-    {
       "school": "天津农学院",
       "province": "天津",
       "city": "天津",
@@ -29884,8 +29774,8 @@
             "min_rank": 54798
           },
           "2024": {
-            "min_score": 437,
-            "min_rank": 87947
+            "min_score": 456,
+            "min_rank": 71587
           }
         }
       }
@@ -30766,8 +30656,8 @@
       "subjects": {
         "physics": {
           "2021": {
-            "min_score": 293,
-            "min_rank": 672
+            "min_score": 475,
+            "min_rank": 168909
           },
           "2022": {
             "min_score": 490,
@@ -30784,8 +30674,8 @@
         },
         "history": {
           "2021": {
-            "min_score": 293,
-            "min_rank": 672
+            "min_score": 480,
+            "min_rank": 66929
           },
           "2022": {
             "min_score": 488,
@@ -31637,20 +31527,6 @@
             "min_score": 484,
             "min_rank": 50033
           }
-        },
-        "physics": {
-          "2022": {
-            "min_score": 487,
-            "min_rank": 164252
-          },
-          "2023": {
-            "min_score": 493,
-            "min_rank": 153050
-          },
-          "2024": {
-            "min_score": 491,
-            "min_rank": 164590
-          }
         }
       }
     },
@@ -32282,10 +32158,6 @@
           "2021": {
             "min_score": 505,
             "min_rank": 46792
-          },
-          "2024": {
-            "min_score": 513,
-            "min_rank": 31497
           }
         }
       }
@@ -34719,52 +34591,6 @@
       }
     },
     {
-      "school": "星海音乐学院",
-      "province": "广东",
-      "city": "广州",
-      "is_985": false,
-      "is_211": false,
-      "is_double_first_class": false,
-      "subjects": {
-        "physics": {
-          "2021": {
-            "min_score": 542,
-            "min_rank": 79405
-          },
-          "2022": {
-            "min_score": 549,
-            "min_rank": 72445
-          },
-          "2023": {
-            "min_score": 550,
-            "min_rank": 75242
-          },
-          "2024": {
-            "min_score": 524,
-            "min_rank": 108726
-          }
-        },
-        "history": {
-          "2021": {
-            "min_score": 529,
-            "min_rank": 30395
-          },
-          "2022": {
-            "min_score": 518,
-            "min_rank": 28808
-          },
-          "2023": {
-            "min_score": 527,
-            "min_rank": 24994
-          },
-          "2024": {
-            "min_score": 519,
-            "min_rank": 28248
-          }
-        }
-      }
-    },
-    {
       "school": "邢台学院",
       "province": "河北",
       "city": "邢台",
@@ -34958,20 +34784,20 @@
       "subjects": {
         "physics": {
           "2021": {
-            "min_score": 507,
-            "min_rank": 124875
+            "min_score": 510,
+            "min_rank": 120771
           },
           "2022": {
             "min_score": 522,
             "min_rank": 109732
           },
           "2023": {
-            "min_score": 513,
-            "min_rank": 123877
+            "min_score": 518,
+            "min_rank": 116901
           },
           "2024": {
-            "min_score": 520,
-            "min_rank": 115067
+            "min_score": 521,
+            "min_rank": 113432
           }
         },
         "history": {
@@ -35914,8 +35740,8 @@
       "subjects": {
         "history": {
           "2023": {
-            "min_score": 492,
-            "min_rank": 45427
+            "min_score": 493,
+            "min_rank": 44730
           },
           "2024": {
             "min_score": 493,
@@ -37232,8 +37058,8 @@
             "min_rank": 18013
           },
           "2024": {
-            "min_score": 528,
-            "min_rank": 23840
+            "min_score": 530,
+            "min_rank": 22904
           }
         }
       }
@@ -38518,8 +38344,8 @@
             "min_rank": 6656
           },
           "2023": {
-            "min_score": 576,
-            "min_rank": 7735
+            "min_score": 577,
+            "min_rank": 7496
           },
           "2024": {
             "min_score": 550,
@@ -39076,12 +38902,12 @@
       "subjects": {
         "history": {
           "2021": {
-            "min_score": 569,
-            "min_rank": 10876
+            "min_score": 577,
+            "min_rank": 8297
           },
           "2022": {
-            "min_score": 554,
-            "min_rank": 11230
+            "min_score": 565,
+            "min_rank": 7701
           },
           "2023": {
             "min_score": 557,
@@ -39208,28 +39034,6 @@
           "2024": {
             "min_score": 549,
             "min_rank": 72449
-          }
-        }
-      }
-    },
-    {
-      "school": "中国音乐学院",
-      "province": "北京",
-      "city": "北京",
-      "is_985": false,
-      "is_211": false,
-      "is_double_first_class": true,
-      "subjects": {
-        "history": {
-          "2024": {
-            "min_score": 566,
-            "min_rank": 9715
-          }
-        },
-        "physics": {
-          "2024": {
-            "min_score": 586,
-            "min_rank": 32671
           }
         }
       }
@@ -39614,21 +39418,7 @@
       "is_211": false,
       "is_double_first_class": true,
       "subjects": {
-        "history": {
-          "2023": {
-            "min_score": 606,
-            "min_rank": 2678
-          },
-          "2024": {
-            "min_score": 570,
-            "min_rank": 8756
-          }
-        },
         "physics": {
-          "2023": {
-            "min_score": 621,
-            "min_rank": 14553
-          },
           "2024": {
             "min_score": 577,
             "min_rank": 40693
@@ -39722,8 +39512,8 @@
             "min_rank": 5726
           },
           "2023": {
-            "min_score": 572,
-            "min_rank": 8693
+            "min_score": 577,
+            "min_rank": 7496
           },
           "2024": {
             "min_score": 565,

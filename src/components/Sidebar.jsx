@@ -3,7 +3,12 @@ import { formatNumber } from '../utils/predict'
 
 export default function Sidebar(props) {
   return (
-    <aside className="sidebar">
+    <>
+      <div
+        className={'sidebar-backdrop' + (props.showSidebar ? ' visible' : '')}
+        onClick={props.onCloseSidebar}
+      />
+      <aside className={'sidebar' + (props.showSidebar ? ' open' : '')}>
       <div className="title-block">
         <div className="seal small">粤</div>
         <p className="eyebrow">Application Console</p>
@@ -22,6 +27,7 @@ export default function Sidebar(props) {
         <input type="number" min="0" max="750" value={props.score} onChange={(event) => props.setScore(event.target.value)} />
         <label>全省排位</label>
         <input value={props.rank} onChange={(event) => props.setRank(event.target.value)} />
+        <p className="rank-auto-hint">分数自动匹配 2024 一分一段表，可手动修正</p>
         <div className="mini-metric">
           <span>2025 {subjectLabels[props.subject]}人数</span>
           <strong>{formatNumber(candidateCounts[props.subject][2025])}</strong>
@@ -58,5 +64,6 @@ export default function Sidebar(props) {
       </section>
 
     </aside>
+    </>
   )
 }

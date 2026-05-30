@@ -282,6 +282,20 @@ if (filteredCount > 0) {
   console.log(`已过滤 ${filteredCount} 条专科批记录，剩余 ${admissions.length} 条`)
 }
 
+// 过滤掉艺术/体育类专业（分数体系和普通类完全不同）
+// 标记：展示分数为文化分，或专业名以艺术/体育类关键词开头
+function isArtsOrSportsMajor(major) {
+  const m = String(major || '')
+  if (m.includes('展示分数为文化分')) return true
+  if (/^(音乐|美术|艺术|舞蹈|表演|播音|编导|主持|摄影|书法|雕塑|设计学|绘画|体育|武术|运动|社会体育|休闲体育|体能训练)/.test(m)) return true
+  return false
+}
+const artFilterCount = admissions.filter(r => isArtsOrSportsMajor(r.major)).length
+if (artFilterCount > 0) {
+  admissions = admissions.filter(r => !isArtsOrSportsMajor(r.major))
+  console.log(`已过滤 ${artFilterCount} 条艺术/体育类专业记录，剩余 ${admissions.length} 条`)
+}
+
 for (const school of PROJECT_985) collectUniversity(school)
 
 const universityRows = [...universities.values()].sort((a, b) => a.school.localeCompare(b.school, 'zh-CN'))

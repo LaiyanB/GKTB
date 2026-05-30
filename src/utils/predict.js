@@ -8,6 +8,24 @@ export function formatPercent(value) {
   return `${(Number(value || 0) * 100).toFixed(2)}%`
 }
 
+/**
+ * 排位趋势方向
+ * 正值（排位数变大）= 竞争减弱 ↑；负值（排位数变小）= 竞争加剧 ↓
+ */
+export function computeTrend(yearRanks) {
+  var years = Object.keys(yearRanks).map(Number).sort().reverse()
+  if (years.length < 2) return { direction: 'flat', diff: 0, label: '数据不足' }
+
+  var latest = yearRanks[years[0]]
+  var prev = yearRanks[years[1]]
+  var diff = latest - prev
+  var pct = diff / prev
+
+  if (pct > 0.02) return { direction: 'up', diff: Math.abs(diff), label: '↑ 排位上升 ' + formatNumber(Math.abs(diff)) }
+  if (pct < -0.02) return { direction: 'down', diff: Math.abs(diff), label: '↓ 排位下降 ' + formatNumber(Math.abs(diff)) }
+  return { direction: 'flat', diff: 0, label: '→ 基本稳定' }
+}
+
 function rankRate(rank, subject, year) {
   const count = candidateCounts[subject]?.[year]
   return count ? rank / count : 0

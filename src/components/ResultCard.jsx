@@ -1,4 +1,4 @@
-import { formatNumber } from '../utils/predict'
+import { formatNumber, computeTrend } from '../utils/predict'
 
 function SchoolTags({ item }) {
   return (
@@ -16,6 +16,7 @@ export default function ResultCard({ item, onSelectSchool, onFavorite, isFavorit
   // 取最新可用年份的排位值（dataYears 已按年份降序排列）
   var latestYear = item.dataYears && item.dataYears.length > 0 ? item.dataYears[0] : null
   var latestRank = latestYear != null ? item.ranks[latestYear] : null
+  var trend = item.ranks ? computeTrend(item.ranks) : null
   return (
     <article className="result-card" onClick={function () { onSelectSchool(item.school) }}>
       <div className="result-head">
@@ -31,6 +32,7 @@ export default function ResultCard({ item, onSelectSchool, onFavorite, isFavorit
         <div><span>{latestYear != null ? latestYear + ' 排位' : '往年排位'}</span><strong>{formatNumber(latestRank)}</strong></div>
         <div><span>预测排位</span><strong>{formatNumber(item.predictedRank)}</strong></div>
       </div>
+      {trend && <p className={'trend-line trend-' + trend.direction}>{trend.label}</p>}
     </article>
   )
 }
