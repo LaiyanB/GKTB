@@ -24,13 +24,21 @@ export default function App() {
   const [only985, setOnly985] = useState(false)
   const [only211, setOnly211] = useState(false)
   const [onlyDoubleFirstClass, setOnlyDoubleFirstClass] = useState(false)
-  const [favorites, setFavorites] = useState([])
+  const [favorites, setFavorites] = useState(function () {
+    var saved = localStorage.getItem('favorites')
+    return saved ? JSON.parse(saved) : []
+  })
   const [showFavorites, setShowFavorites] = useState(false)
   const [exiting, setExiting] = useState(false)
   const [showSidebar, setShowSidebar] = useState(false)
   const [detailSchool, setDetailSchool] = useState(null)
   const [schoolMap, setSchoolMap] = useState({})
   const detailRef = useRef(null)
+
+  // 收藏数据持久化到浏览器本地
+  useEffect(function () {
+    localStorage.setItem('favorites', JSON.stringify(favorites))
+  }, [favorites])
 
   useEffect(function () {
     if (detailSchool && detailRef.current) {
