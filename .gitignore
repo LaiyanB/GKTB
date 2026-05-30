@@ -7,3 +7,4 @@ scripts/sql-batch-*.sql
 scripts/import-all.sql
 scripts/import-calls.json
 .vercel
+semgrep-results.txt
