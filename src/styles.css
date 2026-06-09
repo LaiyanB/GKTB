@@ -1,4 +1,4 @@
-﻿:root {
+:root {
   --bg: #f5efe4;
   --paper: #fbf7ee;
   --paper-2: #f0e8da;
@@ -157,7 +157,7 @@ input:focus, select:focus {
   border-bottom: 1px solid var(--line);
 }
 
-.login-tab {
+.login-card .login-tab {
   flex: 1;
   background: none;
   border: none;
@@ -169,13 +169,13 @@ input:focus, select:focus {
   transition: all 0.15s;
 }
 
-.login-tab.active {
+.login-card .login-tab.active {
   color: var(--accent);
   border-bottom-color: var(--accent);
   font-weight: 600;
 }
 
-.login-tab:hover:not(.active) {
+.login-card .login-tab:hover:not(.active) {
   color: var(--ink-2);
 }
 
@@ -630,260 +630,206 @@ th {
 .sch-result-top {
   display: flex;
   justify-content: space-between;
-  align-items: baseline;
   gap: 8px;
 }
 
-.sch-result-top strong {
-  font-size: 13px;
+.sch-result-school {
+  font-weight: 600;
   color: var(--ink);
+  font-size: 13px;
 }
 
-.sch-city {
+.sch-result-major {
+  color: var(--muted);
   font-size: 12px;
-  color: var(--muted);
-  white-space: nowrap;
-}
-
-.sch-result-top-right {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-}
-
-.fav-btn-sm {
-  width: 24px;
-  height: 24px;
-  border: 1px solid #d4a017;
-  background: transparent;
-  color: #d4a017;
-  border-radius: 3px;
-  cursor: pointer;
-  font-size: 14px;
-  line-height: 1;
-  display: grid;
-  place-items: center;
-  transition: color 0.15s, border-color 0.15s;
-  flex-shrink: 0;
-}
-.fav-btn-sm:hover {
-  color: #d4a017;
-  border-color: #d4a017;
-}
-
-.fav-btn.favorited, .fav-btn-sm.favorited {
-  color: #d4a017;
-  border-color: #d4a017;
-  background: rgba(212, 160, 23, 0.1);
-}
-
-.fav-list {
-  display: grid;
-  gap: 4px;
-  margin-top: 6px;
-  max-height: 200px;
-  overflow-y: auto;
-}
-
-.fav-item {
-  display: grid;
-  grid-template-columns: 18px 1fr 18px;
-  align-items: center;
-  gap: 6px;
-  padding: 3px 6px;
-  border: 1px solid var(--line);
-  border-radius: 3px;
-  background: #fffaf1;
-  font-size: 12px;
-}
-
-.fav-index {
-  color: var(--muted);
-  font-size: 11px;
-  text-align: center;
-}
-
-.fav-remove {
-  width: 18px;
-  height: 18px;
-  border: none;
-  background: transparent;
-  color: var(--muted);
-  cursor: pointer;
-  font-size: 14px;
-  line-height: 1;
-  display: grid;
-  place-items: center;
-  border-radius: 2px;
-}
-.fav-remove:hover {
-  color: var(--danger);
-  background: rgba(139, 44, 31, 0.08);
-}
-
-.sch-result-tags {
-  margin: 4px 0;
-}
-
-.sch-result-lines {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 2px 8px;
   margin-top: 2px;
 }
 
-.sch-line {
+.sch-result-code {
+  color: var(--muted);
   font-size: 11px;
-  color: var(--muted);
+  white-space: nowrap;
 }
 
-/* badges */
-.sch-badges {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 4px;
-}
-
-.sch-badge {
-  font-size: 11px;
-  padding: 1px 6px;
-  border-radius: 2px;
-  border: 1px solid var(--line);
-  color: var(--muted);
-  background: var(--paper);
-}
-
-/* detail view */
-.sch-detail {
-  margin-top: 10px;
-}
-
-.sch-detail-head {
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-start;
-  gap: 10px;
-}
-
-.sch-detail-head h4 {
-  margin: 0 0 4px;
-  font-size: 16px;
-}
-
-.sch-meta {
-  margin: 0;
-  font-size: 12px;
-  color: var(--muted);
-}
-
-.sch-close {
-  border: 1px solid var(--line);
-  background: transparent;
-  color: var(--muted);
-  width: 28px;
-  height: 28px;
-  display: grid;
-  place-items: center;
-  border-radius: 3px;
-  font-size: 16px;
-  cursor: pointer;
-  flex-shrink: 0;
-}
-
-.sch-close:hover {
-  background: var(--paper-2);
-}
-
-/* subject tabs */
 .sch-tabs {
   display: flex;
-  gap: 4px;
-  margin: 12px 0 8px;
+  gap: 0;
+  margin-top: 12px;
+  border-bottom: 1px solid var(--line);
 }
 
 .sch-tab {
   flex: 1;
-  height: 32px;
-  border: 1px solid var(--line);
-  background: transparent;
-  color: var(--ink-2);
-  border-radius: 3px;
+  background: none;
+  border: none;
+  border-bottom: 2px solid transparent;
+  padding: 10px 8px;
   font-size: 13px;
-  cursor: pointer;
-}
-
-.sch-tab.active {
-  background: var(--accent);
-  color: #fff;
-  border-color: var(--accent);
-}
-
-/* year table */
-.sch-table {
-  width: 100%;
-  font-size: 13px;
-  margin-top: 4px;
-}
-
-.sch-table th {
-  font-size: 11px;
   color: var(--muted);
-  padding: 6px 8px;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+.sch-tab.active {
+  color: var(--accent);
+  border-bottom-color: var(--accent);
+  font-weight: 600;
+}
+.sch-tab:hover:not(.active) {
+  color: var(--ink-2);
 }
 
-.sch-table td {
-  padding: 6px 8px;
-  border-bottom: 1px solid var(--line);
-  text-align: center;
+.sch-page {
+  display: grid;
+  gap: 18px;
 }
 
-.sch-table tr:last-child td {
-  border-bottom: none;
+.sch-back-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: none;
+  border: none;
+  color: var(--muted);
+  cursor: pointer;
+  font-size: 13px;
+  padding: 4px 0;
+}
+.sch-back-btn:hover { color: var(--accent); }
+
+.sch-detail-card {
+  background: var(--paper);
+  border: 1px solid var(--line);
+  border-radius: 4px;
+  padding: 24px;
 }
 
-/* ======= Detail Card in Workspace ======= */
+.sch-detail-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: start;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.sch-detail-name {
+  margin: 0 0 4px;
+  font-size: 20px;
+}
+
+.sch-detail-meta {
+  color: var(--muted);
+  font-size: 13px;
+  margin: 0;
+}
+
+.sch-detail-badges {
+  display: flex;
+  gap: 4px;
+  margin-top: 10px;
+  flex-wrap: wrap;
+}
+
+.sch-detail-info {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  gap: 12px;
+  margin-top: 16px;
+}
+
+.sch-detail-info div {
+  border: 1px solid var(--line);
+  background: #fffaf1;
+  padding: 10px;
+}
+
+.sch-detail-info span {
+  display: block;
+  font-size: 12px;
+  color: var(--muted);
+  margin-bottom: 4px;
+}
+
+.sch-detail-info strong {
+  font-size: 16px;
+  color: var(--ink);
+}
+
+.sch-add-btn {
+  composes: ghost-btn;
+  margin-top: 16px;
+}
+
+/* ======= SchoolDetail Page ======= */
 .detail-card {
   background: var(--paper);
   border: 1px solid var(--line);
   border-radius: 4px;
-  box-shadow: 0 8px 22px var(--shadow);
-  padding: 20px 24px;
+  padding: 24px;
 }
 
-.detail-card-head {
+.detail-header {
   display: flex;
   justify-content: space-between;
-  align-items: center;
-  margin-bottom: 12px;
+  align-items: start;
+  gap: 12px;
+  flex-wrap: wrap;
 }
 
-.detail-card-head h2 {
-  font-size: 18px;
+.detail-name {
+  margin: 0 0 4px;
+  font-size: 20px;
+}
+
+.detail-meta {
+  color: var(--muted);
+  font-size: 13px;
   margin: 0;
 }
 
-/* Table: allow horizontal scroll when narrow */
-.table-wrap {
-  overflow-x: auto;
-  -webkit-overflow-scrolling: touch;
+.detail-info {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  gap: 12px;
+  margin-top: 16px;
 }
 
-.hamburger-btn {
-  display: none;
+.detail-info div {
+  border: 1px solid var(--line);
+  background: #fffaf1;
+  padding: 10px;
 }
 
-.sidebar-backdrop {
-  display: none;
+.detail-info span {
+  display: block;
+  font-size: 12px;
+  color: var(--muted);
+  margin-bottom: 4px;
 }
 
-/* 中等窗口：缩小侧栏宽度，保持双列 */
-@media (max-width: 1100px) {
-  .sidebar { width: 170px; padding: 4px 6px; font-size: 11px; }
-  .workspace { margin-left: 170px; }
-  .sidebar .panel { padding: 6px; margin-top: 4px; }
+.detail-info strong {
+  font-size: 16px;
+  color: var(--ink);
+}
+
+/* ======= Refactor / responsive ======= */
+@media (max-width: 1060px) {
+  .sidebar { width: 200px; font-size: 12px; }
+  .sidebar .panel { padding: 6px; }
+  .sidebar input, .sidebar select { height: 26px; font-size: 11px; }
   .sidebar .panel-title h2 { font-size: 13px; }
+  .workspace { margin-left: 200px; padding: 20px; }
+  .result-grid { grid-template-columns: 1fr 1fr; }
+  .hero-metrics { grid-template-columns: 1fr 1fr; }
+  .sidebar .fav-list { max-height: 55vh; }
+}
+
+@media (max-width: 768px) {
+  .result-grid { grid-template-columns: 1fr; }
+  .hero-metrics { grid-template-columns: 1fr; }
+  .sidebar { width: 200px; font-size: 12px; }
+  .sidebar .panel { padding: 5px; }
   .sidebar input, .sidebar select { height: 24px; font-size: 11px; }
-  .sidebar .title-block h1 { font-size: 13px; }
+  .sidebar .panel-title h2 { font-size: 12px; }
   .sidebar .fav-list { max-height: 50vh; }
 }
 
