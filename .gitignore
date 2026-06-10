@@ -14,3 +14,5 @@ semgrep-results.txt
 *.key
 .env
 .env.local
+# 超大文件 — 超过 Cloudflare Pages 25MB 限制，从 Supabase 加载
+public/data/admissions.json
