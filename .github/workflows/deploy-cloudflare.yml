@@ -29,4 +29,4 @@ jobs:
         uses: cloudflare/wrangler-action@v3
         with:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
-          command: pages deploy dist --project-name=gkth --branch=main
+          command: pages deploy dist --project-name=gd-admissions-guide --branch=main
