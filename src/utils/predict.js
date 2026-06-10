@@ -93,10 +93,12 @@ export function forecastRecord(record) {
 
 export function classifyRecord(userRank, predictedRank) {
   const diffRate = (Number(userRank || 0) - predictedRank) / Math.max(predictedRank, 1)
-  if (diffRate <= -0.10) return { level: '保', risk: '较低', diffRate }
-  if (diffRate <= 0.05) return { level: '稳', risk: '中等', diffRate }
-  if (diffRate <= 0.20) return { level: '冲', risk: '偏高', diffRate }
-  return { level: '险', risk: '很高', diffRate }
+  // 保：用户排位比学校要求好 25%+（非常安全）
+  if (diffRate <= -0.25) return { level: '保', risk: '较低', diffRate }
+  // 稳：用户排位在学校附近 ±25% 以内
+  if (diffRate <= 0.25) return { level: '稳', risk: '中等', diffRate }
+  // 冲：用户排位比学校要求差 25%+（挑战院校）
+  return { level: '冲', risk: '偏高', diffRate }
 }
 
 export function trendLabel(rateChange) {

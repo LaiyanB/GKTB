@@ -165,8 +165,7 @@ export default function App() {
   const grouped = {
     冲: deduped.filter((item) => item.level === '冲'),
     稳: deduped.filter((item) => item.level === '稳'),
-    保: deduped.filter((item) => item.level === '保'),
-    险: deduped.filter((item) => item.level === '险')
+    保: deduped.filter((item) => item.level === '保')
   }
 
   function toggleFavorite(item) {
@@ -390,7 +389,7 @@ export default function App() {
                           <span className="badge 冲">冲</span>
                           <span className="preview-col-label">略有挑战</span>
                         </div>
-                        <div className="preview-item">
+                        <div className="preview-item" onClick={function () { handleSelectSchool('华南理工大学') }}>
                           <div className="preview-item-top">
                             <span className="preview-school">华南理工大学</span>
                             <span className="preview-tag">211</span>
@@ -407,7 +406,7 @@ export default function App() {
                           <span className="badge 稳">稳</span>
                           <span className="preview-col-label">比较稳妥</span>
                         </div>
-                        <div className="preview-item">
+                        <div className="preview-item" onClick={function () { handleSelectSchool('广东工业大学') }}>
                           <div className="preview-item-top">
                             <span className="preview-school">广东工业大学</span>
                             <span className="preview-tag">公办</span>
@@ -424,7 +423,7 @@ export default function App() {
                           <span className="badge 保">保</span>
                           <span className="preview-col-label">稳妥保底</span>
                         </div>
-                        <div className="preview-item">
+                        <div className="preview-item" onClick={function () { handleSelectSchool('广州大学') }}>
                           <div className="preview-item-top">
                             <span className="preview-school">广州大学</span>
                             <span className="preview-tag">公办</span>
@@ -473,7 +472,6 @@ export default function App() {
                     <ResultColumn title="冲" items={grouped.冲} onSelectSchool={handleSelectSchool} onFavorite={toggleFavorite} isFavorited={isFavorited} />
                     <ResultColumn title="稳" items={grouped.稳} onSelectSchool={handleSelectSchool} onFavorite={toggleFavorite} isFavorited={isFavorited} />
                     <ResultColumn title="保" items={grouped.保} onSelectSchool={handleSelectSchool} onFavorite={toggleFavorite} isFavorited={isFavorited} />
-                    <ResultColumn title="险" items={grouped.险} onSelectSchool={handleSelectSchool} onFavorite={toggleFavorite} isFavorited={isFavorited} />
                   </section>
                 </>
               )}

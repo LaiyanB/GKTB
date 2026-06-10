@@ -502,6 +502,11 @@ input:focus, select:focus {
 }
 .preview-item {
   padding: 12px;
+  cursor: pointer;
+  transition: box-shadow 0.15s ease;
+}
+.preview-item:hover {
+  box-shadow: 0 2px 10px rgba(0,0,0,0.08);
 }
 .preview-item-top {
   display: flex;
@@ -563,7 +568,7 @@ input:focus, select:focus {
 
 .result-grid {
   display: grid;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
+  grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 16px;
 }
 
@@ -636,8 +641,6 @@ input:focus, select:focus {
 .badge.冲 { color: #9a5a12; background: #f6ead2; border-color: #e1c894; }
 .badge.稳 { color: var(--accent); background: rgba(83, 125, 150, 0.08); border-color: rgba(83, 125, 150, 0.25); }
 .badge.保 { color: var(--green); background: rgba(74, 107, 74, 0.08); border-color: rgba(74, 107, 74, 0.24); }
-.badge.险 { color: #b91c1c; background: rgba(185, 28, 28, 0.08); border-color: rgba(185, 28, 28, 0.24); }
-.badge.险 { color: var(--danger); background: rgba(139, 44, 31, 0.08); border-color: rgba(139, 44, 31, 0.24); }
 
 .ghost-btn {
   background: transparent;
@@ -787,6 +790,19 @@ th {
   padding: 12px 0;
 }
 
+.sch-detail-head {
+  margin-bottom: 4px;
+}
+.sch-detail-head h4 {
+  margin: 0 0 4px;
+  font-size: 20px;
+}
+.sch-detail-head .sch-meta {
+  margin: 0 0 8px;
+  color: var(--muted);
+  font-size: 13px;
+}
+
 .sch-results {
   position: absolute;
   top: 100%;
@@ -847,6 +863,12 @@ th {
   gap: 0;
   margin-top: 12px;
   border-bottom: 1px solid var(--line);
+}
+
+.sch-detail {
+  width: 100%;
+  max-width: 100%;
+  overflow: hidden;
 }
 
 .sch-tab {
@@ -956,6 +978,19 @@ th {
   border: 1px solid var(--line);
   border-radius: 4px;
   padding: 24px;
+}
+
+.detail-card-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 8px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid var(--line);
+}
+.detail-card-head h2 {
+  margin: 0;
+  font-size: 18px;
 }
 
 .detail-header {
@@ -1142,6 +1177,50 @@ th {
 
   .login-card button {
     height: 44px;
+  }
+
+  /* ===== 院校详情移动端适配 ===== */
+  .detail-card-head h2 {
+    font-size: 16px;
+  }
+  .sch-detail-head h4 {
+    font-size: 18px;
+    margin: 0 0 4px;
+  }
+  .sch-majors-table th,
+  .sch-majors-table td {
+    padding: 6px 4px;
+    font-size: 12px;
+    white-space: nowrap;
+  }
+  .sch-majors-table th:first-child,
+  .sch-majors-table td:first-child {
+    min-width: 60px;
+    max-width: 100px;
+    font-size: 12px;
+    white-space: normal;
+    word-break: break-word;
+  }
+  .sch-majors-table th:not(:first-child),
+  .sch-majors-table td:not(:first-child) {
+    font-size: 11px;
+    padding: 6px 4px;
+  }
+  .sch-majors-table td strong {
+    font-size: 12px;
+  }
+  .sch-detail .sch-section-label {
+    font-size: 12px;
+  }
+  .detail-info {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 8px;
+  }
+  .detail-info div {
+    padding: 8px;
+  }
+  .detail-info strong {
+    font-size: 14px;
   }
 }
 
