@@ -563,7 +563,7 @@ input:focus, select:focus {
 
 .result-grid {
   display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
+  grid-template-columns: repeat(4, minmax(0, 1fr));
   gap: 16px;
 }
 
@@ -636,6 +636,7 @@ input:focus, select:focus {
 .badge.冲 { color: #9a5a12; background: #f6ead2; border-color: #e1c894; }
 .badge.稳 { color: var(--accent); background: rgba(83, 125, 150, 0.08); border-color: rgba(83, 125, 150, 0.25); }
 .badge.保 { color: var(--green); background: rgba(74, 107, 74, 0.08); border-color: rgba(74, 107, 74, 0.24); }
+.badge.险 { color: #b91c1c; background: rgba(185, 28, 28, 0.08); border-color: rgba(185, 28, 28, 0.24); }
 .badge.险 { color: var(--danger); background: rgba(139, 44, 31, 0.08); border-color: rgba(139, 44, 31, 0.24); }
 
 .ghost-btn {

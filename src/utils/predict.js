@@ -65,10 +65,9 @@ export function forecastRecord(record) {
     trend += (ranks[index] - ranks[index + 1]) * trendWeights[index]
   }
 
-  // 用 0.2 系数削弱趋势影响，再截断到历史最差值以内
-  const rawPredicted = Math.round(baseline + trend * 0.2)
-  const maxRank = Math.max(...ranks)
-  const predictedRank = Math.max(1, Math.min(rawPredicted, maxRank))
+  // 用 0.2 系数削弱趋势影响，允许向两个方向外推
+  // bugfix: 去掉截断到 maxRank 的上界钳制，防止排位下行趋势被抹平
+  const predictedRank = Math.max(1, Math.round(baseline + trend * 0.2))
 
   // 保留 rateChange 用于趋势标签（用排位占比计算，保持标签阈值兼容）
   const rateForYear = (year) => {
@@ -93,10 +92,10 @@ export function forecastRecord(record) {
 }
 
 export function classifyRecord(userRank, predictedRank) {
-  const diffRate = (Number(userRank || 0) - predictedRank) / predictedRank
-  if (diffRate <= -0.05) return { level: '保', risk: '较低', diffRate }
+  const diffRate = (Number(userRank || 0) - predictedRank) / Math.max(predictedRank, 1)
+  if (diffRate <= -0.10) return { level: '保', risk: '较低', diffRate }
   if (diffRate <= 0.05) return { level: '稳', risk: '中等', diffRate }
-  if (diffRate <= 0.15) return { level: '冲', risk: '偏高', diffRate }
+  if (diffRate <= 0.20) return { level: '冲', risk: '偏高', diffRate }
   return { level: '险', risk: '很高', diffRate }
 }
 

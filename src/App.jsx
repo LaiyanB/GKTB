@@ -165,7 +165,8 @@ export default function App() {
   const grouped = {
     冲: deduped.filter((item) => item.level === '冲'),
     稳: deduped.filter((item) => item.level === '稳'),
-    保: deduped.filter((item) => item.level === '保')
+    保: deduped.filter((item) => item.level === '保'),
+    险: deduped.filter((item) => item.level === '险')
   }
 
   function toggleFavorite(item) {
@@ -472,6 +473,7 @@ export default function App() {
                     <ResultColumn title="冲" items={grouped.冲} onSelectSchool={handleSelectSchool} onFavorite={toggleFavorite} isFavorited={isFavorited} />
                     <ResultColumn title="稳" items={grouped.稳} onSelectSchool={handleSelectSchool} onFavorite={toggleFavorite} isFavorited={isFavorited} />
                     <ResultColumn title="保" items={grouped.保} onSelectSchool={handleSelectSchool} onFavorite={toggleFavorite} isFavorited={isFavorited} />
+                    <ResultColumn title="险" items={grouped.险} onSelectSchool={handleSelectSchool} onFavorite={toggleFavorite} isFavorited={isFavorited} />
                   </section>
                 </>
               )}
