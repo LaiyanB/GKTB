@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
+import { Search, SlidersHorizontal, BarChart3, ClipboardList, Lightbulb } from 'lucide-react'
 
 import { records as mockRecords, subjectLabels } from './data'
 import { classifyRecord, forecastRecord, formatNumber } from './utils/predict'
@@ -334,6 +335,109 @@ export default function App() {
                 </section>
               ) : (
                 <>
+                  {/* 引导卡片 */}
+                  <section className="guide-card">
+                    <div className="guide-card-icon"><Lightbulb size={22} /></div>
+                    <div className="guide-card-body">
+                      <p className="eyebrow">Quick Start</p>
+                      <h2>开始使用 — 四步搞定志愿方案</h2>
+                      <p>填写考生信息 → 筛选目标院校 → 查看冲稳保推荐 → 生成志愿草案</p>
+                    </div>
+                    <div className="guide-steps">
+                      <div className="guide-step">
+                        <div className="guide-step-icon"><Search size={18} /></div>
+                        <div className="guide-step-text">
+                          <strong>填写信息</strong>
+                          <span>科类、分数、排位</span>
+                        </div>
+                      </div>
+                      <div className="guide-step-arrow">→</div>
+                      <div className="guide-step">
+                        <div className="guide-step-icon"><SlidersHorizontal size={18} /></div>
+                        <div className="guide-step-text">
+                          <strong>筛选院校</strong>
+                          <span>城市、专业、标签</span>
+                        </div>
+                      </div>
+                      <div className="guide-step-arrow">→</div>
+                      <div className="guide-step">
+                        <div className="guide-step-icon"><BarChart3 size={18} /></div>
+                        <div className="guide-step-text">
+                          <strong>冲稳保分析</strong>
+                          <span>自动计算推荐</span>
+                        </div>
+                      </div>
+                      <div className="guide-step-arrow">→</div>
+                      <div className="guide-step">
+                        <div className="guide-step-icon"><ClipboardList size={18} /></div>
+                        <div className="guide-step-text">
+                          <strong>生成草案</strong>
+                          <span>收藏 · 排序 · 导出</span>
+                        </div>
+                      </div>
+                    </div>
+                  </section>
+
+                  {/* 示例预览 */}
+                  <section className="preview-card">
+                    <p className="eyebrow">Example Preview</p>
+                    <h2>推荐结果预览</h2>
+                    <p>下方为系统根据您的排位自动推荐的冲稳保院校样式示意：</p>
+                    <div className="preview-grid">
+                      <div className="preview-col">
+                        <div className="preview-col-head">
+                          <span className="badge 冲">冲</span>
+                          <span className="preview-col-label">略有挑战</span>
+                        </div>
+                        <div className="preview-item">
+                          <div className="preview-item-top">
+                            <span className="preview-school">华南理工大学</span>
+                            <span className="preview-tag">211</span>
+                          </div>
+                          <p className="preview-major">计算机科学与技术 · 广州市</p>
+                          <div className="preview-metrics">
+                            <span>预测排位 <strong>32,000</strong></span>
+                            <span>排位占比 4.2%</span>
+                          </div>
+                        </div>
+                      </div>
+                      <div className="preview-col">
+                        <div className="preview-col-head">
+                          <span className="badge 稳">稳</span>
+                          <span className="preview-col-label">比较稳妥</span>
+                        </div>
+                        <div className="preview-item">
+                          <div className="preview-item-top">
+                            <span className="preview-school">广东工业大学</span>
+                            <span className="preview-tag">公办</span>
+                          </div>
+                          <p className="preview-major">软件工程 · 广州市</p>
+                          <div className="preview-metrics">
+                            <span>预测排位 <strong>48,000</strong></span>
+                            <span>排位占比 3.1%</span>
+                          </div>
+                        </div>
+                      </div>
+                      <div className="preview-col">
+                        <div className="preview-col-head">
+                          <span className="badge 保">保</span>
+                          <span className="preview-col-label">稳妥保底</span>
+                        </div>
+                        <div className="preview-item">
+                          <div className="preview-item-top">
+                            <span className="preview-school">广州大学</span>
+                            <span className="preview-tag">公办</span>
+                          </div>
+                          <p className="preview-major">电子信息工程 · 广州市</p>
+                          <div className="preview-metrics">
+                            <span>预测排位 <strong>62,000</strong></span>
+                            <span>排位占比 2.3%</span>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </section>
+
                   <header className="hero-card">
                     <div>
                       <p className="eyebrow">Offline Admissions Dataset</p>
