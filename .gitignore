@@ -9,3 +9,8 @@ scripts/import-all.sql
 scripts/import-calls.json
 .vercel
 semgrep-results.txt
+# 密钥/配置文件 — 防止误提交
+*.pem
+*.key
+.env
+.env.local

@@ -1,5 +1,6 @@
 name = "gkth"
 compatibility_date = "2025-04-01"
+account_id = "522bea4c2912796eb98ade9676fe0f4a"
 
 [pages]
 build_command = "npm run build"
