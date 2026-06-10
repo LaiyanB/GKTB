@@ -3,7 +3,7 @@ import { Search, SlidersHorizontal, BarChart3, ClipboardList, Lightbulb } from '
 
 import { records as mockRecords, subjectLabels } from './data'
 import { classifyRecord, forecastRecord, formatNumber } from './utils/predict'
-import { adaptAdmissions, simplifyMajor } from './utils/adaptAdmissions'
+import { adaptAdmissions } from './utils/adaptAdmissions'
 import { useOfflineAdmissions } from './hooks/useOfflineAdmissions'
 import { useScoreSegments } from './hooks/useScoreSegments'
 import Login from './components/Login'
@@ -224,40 +224,29 @@ export default function App() {
   var detailMajors = useMemo(function () {
     if (!detailSchool || !detailSchool._name) return []
     var name = detailSchool._name
-    var groups = new Map()
+    var out = []
     for (var i = 0; i < sourceRecords.length; i++) {
       var r = sourceRecords[i]
       if (r.school !== name) continue
-      var key = (r.subject || '') + '::' + simplifyMajor(r.major || '')
-      if (!groups.has(key)) {
-        groups.set(key, {
-          subject: r.subject,
-          group: r.group,
-          major: r.major,
-          direction: r.direction,
-          ranks: { ...(r.ranks || {}) },
-          scores: { ...(r.scores || {}) },
-          predictedRank: r.predictedRank,
-          predictedRate: r.predictedRate,
-          level: r.level
-        })
-      } else {
-        var existing = groups.get(key)
-        if (r.ranks) {
-          Object.keys(r.ranks).forEach(function (y) {
-            if (!(y in existing.ranks) || r.ranks[y] < existing.ranks[y]) {
-              existing.ranks[y] = r.ranks[y]
-              if (r.scores && r.scores[y] != null) existing.scores[y] = r.scores[y]
-            }
-          })
-        }
-      }
+      var f = forecastRecord(r)
+      var c = classifyRecord(rank, f.predictedRank)
+      out.push({
+        subject: r.subject,
+        group: r.group,
+        major: r.major,
+        direction: r.direction,
+        ranks: { ...(r.ranks || {}) },
+        scores: { ...(r.scores || {}) },
+        predictedRank: f.predictedRank,
+        predictedRate: f.predictedRate,
+        level: c.level
+      })
     }
-    return [...groups.values()].sort(function (a, b) {
+    return out.sort(function (a, b) {
       if (a.subject !== b.subject) return a.subject === 'physics' ? -1 : 1
       return (a.predictedRank || 999999) - (b.predictedRank || 999999)
     })
-  }, [detailSchool, sourceRecords])
+  }, [detailSchool, sourceRecords, rank])
 
   if (!loggedIn) return <Login onLogin={() => setLoggedIn(true)} />
 
