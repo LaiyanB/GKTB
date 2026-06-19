@@ -10,6 +10,7 @@ import Login from './components/Login'
 import Sidebar from './components/Sidebar'
 import ResultColumn from './components/ResultColumn'
 import FavoritesPage from './components/FavoritesPage'
+import { VolunteerPage } from './components/volunteer/VolunteerPage'
 import SchoolSearch, { SchoolDetail } from './components/SchoolSearch'
 import { supabase } from './supabase'
 
@@ -286,17 +287,18 @@ export default function App() {
           ☰
         </button>
         <button
-          className={'workspace-back' + (showFavorites || detailSchool ? ' visible' : '') + (exiting ? ' exiting' : '')}
+          className={'workspace-back' + (showFavorites || showVolunteer || detailSchool ? ' visible' : '') + (exiting ? ' exiting' : '')}
           onClick={function () {
             setExiting(true)
             setTimeout(function () {
               setShowFavorites(false)
+              setShowVolunteer(false)
               setDetailSchool(null)
               setExiting(false)
             }, 160)
           }}
           title="返回"
-          disabled={!(showFavorites || detailSchool) || exiting}
+          disabled={!(showFavorites || showVolunteer || detailSchool) || exiting}
         >←</button>
 
         <div key={showFavorites ? 'fav' : (detailSchool ? 'detail' : 'main')} className={'workspace-content' + (exiting ? ' exiting' : '')}>
@@ -365,6 +367,20 @@ export default function App() {
                         </div>
                       </div>
                     </div>
+                  </section>
+
+                  {/* 志愿填报入口 */}
+                  <section className="charts-entry-card">
+                    <div className="charts-entry-icon">
+                      <ClipboardList size={24} />
+                    </div>
+                    <div className="charts-entry-body">
+                      <h3>志愿填报模拟器</h3>
+                      <p>智能生成冲稳保志愿方案，梯度分析一键导出</p>
+                    </div>
+                    <button className="charts-entry-btn" onClick={() => setShowVolunteer(true)}>
+                      开始填报 →
+                    </button>
                   </section>
 
                   {/* 示例预览 */}
