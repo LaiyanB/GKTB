@@ -301,7 +301,7 @@ export default function App() {
           disabled={!(showFavorites || showVolunteer || detailSchool) || exiting}
         >←</button>
 
-        <div key={showFavorites ? 'fav' : (detailSchool ? 'detail' : 'main')} className={'workspace-content' + (exiting ? ' exiting' : '')}>
+        <div key={showFavorites ? 'fav' : (showVolunteer ? 'volunteer' : (detailSchool ? 'detail' : 'main'))} className={'workspace-content' + (exiting ? ' exiting' : '')}>
           {showFavorites ? (
             <FavoritesPage
               favorites={favorites}
@@ -312,6 +312,13 @@ export default function App() {
               onSelectSchool={handleSelectSchool}
               onFavorite={toggleFavorite}
               isFavorited={isFavorited}
+            />
+          ) : showVolunteer ? (
+            <VolunteerPage
+              subject={subject}
+              score={score}
+              rank={rank}
+              onBack={() => setShowVolunteer(false)}
             />
           ) : (
             <>
