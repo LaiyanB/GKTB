@@ -11,6 +11,7 @@ import Sidebar from './components/Sidebar'
 import ResultColumn from './components/ResultColumn'
 import FavoritesPage from './components/FavoritesPage'
 import SchoolSearch, { SchoolDetail } from './components/SchoolSearch'
+import { ChartsDemo } from './components/charts/ChartsDemo'
 import { supabase } from './supabase'
 
 export default function App() {
@@ -30,6 +31,7 @@ export default function App() {
   const [showFavorites, setShowFavorites] = useState(false)
   const [exiting, setExiting] = useState(false)
   const [showSidebar, setShowSidebar] = useState(false)
+  const [showCharts, setShowCharts] = useState(false)
   const [detailSchool, setDetailSchool] = useState(null)
   const [schoolMap, setSchoolMap] = useState({})
   const detailRef = useRef(null)
@@ -286,7 +288,7 @@ export default function App() {
           ☰
         </button>
         <button
-          className={'workspace-back' + (showFavorites || detailSchool ? ' visible' : '') + (exiting ? ' exiting' : '')}
+          className={'workspace-back' + (showFavorites || detailSchool || showCharts ? ' visible' : '') + (exiting ? ' exiting' : '')}
           onClick={function () {
             setExiting(true)
             setTimeout(function () {
@@ -296,11 +298,13 @@ export default function App() {
             }, 160)
           }}
           title="返回"
-          disabled={!(showFavorites || detailSchool) || exiting}
+          disabled={!(showFavorites || detailSchool || showCharts) || exiting}
         >←</button>
 
-        <div key={showFavorites ? 'fav' : (detailSchool ? 'detail' : 'main')} className={'workspace-content' + (exiting ? ' exiting' : '')}>
-          {showFavorites ? (
+        <div key={showFavorites ? 'fav' : (detailSchool ? 'detail' : (showCharts ? 'charts' : 'main'))} className={'workspace-content' + (exiting ? ' exiting' : '')}>
+          {showCharts ? (
+            <ChartsDemo records={sourceRecords} />
+          ) : showFavorites ? (
             <FavoritesPage
               favorites={favorites}
               onRemove={removeFavorite}
@@ -365,6 +369,20 @@ export default function App() {
                         </div>
                       </div>
                     </div>
+                  </section>
+
+                  {/* 图表入口 */}
+                  <section className="charts-entry-card">
+                    <div className="charts-entry-icon">
+                      <BarChart3 size={24} />
+                    </div>
+                    <div className="charts-entry-body">
+                      <h3>数据可视化分析</h3>
+                      <p>查看历年分数线趋势、专业分数分布等图表分析</p>
+                    </div>
+                    <button className="charts-entry-btn" onClick={() => setShowCharts(true)}>
+                      进入图表 →
+                    </button>
                   </section>
 
                   {/* 示例预览 */}
