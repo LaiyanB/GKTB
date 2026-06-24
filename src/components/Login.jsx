@@ -11,6 +11,8 @@ export default function Login({ onLogin }) {
   const [loading, setLoading] = useState(false)
   const [message, setMessage] = useState('')
 
+  /* ========= 邮箱登录（OTP 验证码） ========= */
+
   async function handleSendOtp(e) {
     e.preventDefault()
     setError('')
@@ -69,6 +71,8 @@ export default function Login({ onLogin }) {
     }
   }
 
+  /* ========= 密码登录 ========= */
+
   async function handlePasswordLogin(e) {
     e.preventDefault()
     setError('')
@@ -83,6 +87,8 @@ export default function Login({ onLogin }) {
       setLoading(false)
     }
   }
+
+  /* ========= 通用 ========= */
 
   function resetOtp() {
     setStep('email')
@@ -99,6 +105,7 @@ export default function Login({ onLogin }) {
         <h1>广东省高考志愿填报指南</h1>
         <p className="login-copy">面向广东考生与家长的志愿筛选、风险分层和草案管理工具。</p>
 
+        {/* 切换标签 */}
         <div className="login-tabs">
           <button
             type="button"
@@ -113,6 +120,7 @@ export default function Login({ onLogin }) {
         </div>
 
         {tab === 'password' ? (
+          /* ====== 密码登录 ====== */
           <form onSubmit={handlePasswordLogin}>
             {error && <p className="login-error">{error}</p>}
 
@@ -133,6 +141,7 @@ export default function Login({ onLogin }) {
             </p>
           </form>
         ) : step === 'email' ? (
+          /* ====== 邮箱登录 — 输入邮箱 ====== */
           <form onSubmit={handleSendOtp}>
             {error && <p className="login-error">{error}</p>}
 
@@ -147,6 +156,7 @@ export default function Login({ onLogin }) {
             <p className="login-hint">验证码将发送到您的邮箱</p>
           </form>
         ) : (
+          /* ====== 邮箱登录 — 输入验证码 ====== */
           <form onSubmit={handleVerifyOtp}>
             {error && <p className="login-error">{error}</p>}
             {message && <p className="login-success">{message}</p>}
