@@ -1,4 +1,4 @@
-import { candidateCounts, cityOptions, majorOptions, subjectLabels } from '../data'
+import { candidateCounts, cityOptions, ELECTIVE_OPTIONS, majorPlaceholder, subjectLabels } from '../data'
 import { formatNumber } from '../utils/predict'
 
 export default function Sidebar(props) {
@@ -23,6 +23,27 @@ export default function Sidebar(props) {
           <option value="physics">物理类</option>
           <option value="history">历史类</option>
         </select>
+        <label>再选科目</label>
+        <div className="elective-checks">
+          {ELECTIVE_OPTIONS.map(function (subj) {
+            var checked = props.electives.includes(subj)
+            return (
+              <label key={subj} className={'elective-check' + (checked ? ' active' : '')}>
+                <input type="checkbox" checked={checked}
+                  onChange={function () {
+                    if (checked) {
+                      props.setElectives(props.electives.filter(function (s) { return s !== subj }))
+                    } else {
+                      props.setElectives([].concat(props.electives, [subj]))
+                    }
+                  }} />
+                {subj}
+              </label>
+            )
+          })}
+        </div>
+        {props.electives.length > 0 && props.electives.length < 2 &&
+          <p className="elective-hint">新高考 3+1+2 通常选 2 科</p>}
         <label>高考分数</label>
         <input type="number" min="0" max="750" value={props.score} onChange={(event) => props.setScore(event.target.value)} />
         <label>全省排位</label>
@@ -41,9 +62,12 @@ export default function Sidebar(props) {
           {cityOptions.map((item) => <option key={item}>{item}</option>)}
         </select>
         <label>专业方向</label>
-        <select value={props.major} onChange={(event) => props.setMajor(event.target.value)}>
-          {majorOptions.map((item) => <option key={item}>{item}</option>)}
-        </select>
+        <div className="major-input-wrap">
+          <input type="text" placeholder={majorPlaceholder} value={props.major}
+            onChange={(event) => props.setMajor(event.target.value)} />
+          {props.major && <button type="button" className="major-clear-btn"
+            onClick={() => props.setMajor('')} title="清除">×</button>}
+        </div>
         <div className="checks">
           <label><input type="checkbox" checked={props.publicOnly} onChange={(event) => props.setPublicOnly(event.target.checked)} /> 只看公办</label>
           <label><input type="checkbox" checked={props.noCoop} onChange={(event) => props.setNoCoop(event.target.checked)} /> 排除中外合作</label>

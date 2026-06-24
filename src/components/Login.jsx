@@ -5,16 +5,14 @@ export default function Login({ onLogin }) {
   const [tab, setTab] = useState('otp')        // 'otp' | 'password'
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
-  const [code, setCode] = useState('')
-  const [step, setStep] = useState('email')    // 'email' | 'code' | 'set-password'
+  const [step, setStep] = useState('email')    // 'email' | 'sent'
   const [error, setError] = useState('')
   const [loading, setLoading] = useState(false)
   const [message, setMessage] = useState('')
-  const [newPassword, setNewPassword] = useState('')
 
-  /* ========= 验证码登录 ========= */
+  /* ========= 邮箱登录（魔法链接） ========= */
 
-  async function handleSendCode(e) {
+  async function handleSendLink(e) {
     e.preventDefault()
     setError('')
     setMessage('')
@@ -25,8 +23,8 @@ export default function Login({ onLogin }) {
         options: { shouldCreateUser: true },
       })
       if (error) throw error
-      setMessage('✅ 验证码已发送，请检查邮箱')
-      setStep('code')
+      setMessage('✅ 登录链接已发送，请检查邮箱')
+      setStep('sent')
     } catch (err) {
       setError(err.message)
     } finally {
@@ -34,36 +32,17 @@ export default function Login({ onLogin }) {
     }
   }
 
-  async function handleVerifyCode(e) {
-    e.preventDefault()
+  async function handleResendLink() {
     setError('')
+    setMessage('')
     setLoading(true)
     try {
-      const { data, error } = await supabase.auth.verifyOtp({
+      const { error } = await supabase.auth.signInWithOtp({
         email,
-        token: code.trim(),
-        type: 'email',
+        options: { shouldCreateUser: true },
       })
       if (error) throw error
-      if (!data.session) throw new Error('验证失败')
-      // 验证成功，询问是否设置密码
-      setStep('set-password')
-      setMessage('✅ 登录成功！可选设置密码，下次可直接密码登录')
-    } catch (err) {
-      setError(err.message)
-    } finally {
-      setLoading(false)
-    }
-  }
-
-  async function handleSetPassword(e) {
-    e.preventDefault()
-    setError('')
-    setLoading(true)
-    try {
-      const { error } = await supabase.auth.updateUser({ password: newPassword })
-      if (error) throw error
-      onLogin()
+      setMessage('✅ 登录链接已重新发送')
     } catch (err) {
       setError(err.message)
     } finally {
@@ -92,8 +71,6 @@ export default function Login({ onLogin }) {
 
   function resetOtp() {
     setStep('email')
-    setCode('')
-    setNewPassword('')
     setError('')
     setMessage('')
   }
@@ -112,7 +89,7 @@ export default function Login({ onLogin }) {
             type="button"
             className={tab === 'otp' ? 'login-tab active' : 'login-tab'}
             onClick={function () { setTab('otp'); resetOtp() }}
-          >验证码登录</button>
+          >邮箱登录</button>
           <button
             type="button"
             className={tab === 'password' ? 'login-tab active' : 'login-tab'}
@@ -138,12 +115,12 @@ export default function Login({ onLogin }) {
             </button>
 
             <p className="login-hint">
-              首次使用？切换到「验证码登录」设置密码
+              首次使用？通过「邮箱登录」创建账号
             </p>
           </form>
         ) : step === 'email' ? (
-          /* ====== 验证码 — 输入邮箱 ====== */
-          <form onSubmit={handleSendCode}>
+          /* ====== 邮箱登录 — 输入邮箱 ====== */
+          <form onSubmit={handleSendLink}>
             {error && <p className="login-error">{error}</p>}
 
             <label>邮箱</label>
@@ -151,54 +128,28 @@ export default function Login({ onLogin }) {
               onChange={function (e) { setEmail(e.target.value) }} required />
 
             <button type="submit" disabled={loading}>
-              {loading ? '发送中…' : '发送验证码'}
+              {loading ? '发送中…' : '发送登录链接'}
             </button>
 
-            <p className="login-hint">6 位验证码将发送到您的邮箱</p>
+            <p className="login-hint">登录链接将发送到您的邮箱，点击即可登录</p>
           </form>
-        ) : step === 'code' ? (
-          /* ====== 验证码 — 输入验证码 ====== */
-          <form onSubmit={handleVerifyCode}>
+        ) : (
+          /* ====== 邮箱登录 — 链接已发送 ====== */
+          <div className="login-sent">
             {error && <p className="login-error">{error}</p>}
             {message && <p className="login-success">{message}</p>}
 
-            <label>验证码</label>
-            <input type="text" inputMode="numeric" placeholder="请输入 6 位验证码"
-              value={code} onChange={function (e) { setCode(e.target.value) }}
-              maxLength={6} required />
-
-            <button type="submit" disabled={loading}>
-              {loading ? '验证中…' : '验证并登录'}
-            </button>
+            <p className="login-sent-text">请检查您的邮箱，点击邮件中的链接即可自动完成登录。</p>
 
             <p className="login-hint">
               未收到？
               <button className="link-btn" onClick={resetOtp}>更换邮箱</button>
               {' · '}
-              <button className="link-btn" onClick={handleSendCode}>重新发送</button>
-            </p>
-          </form>
-        ) : (
-          /* ====== 验证码 — 设置密码（可选） ====== */
-          <form onSubmit={handleSetPassword}>
-            {message && <p className="login-success">{message}</p>}
-
-            <label>设置密码（可选）</label>
-            <input type="password" placeholder="至少 6 位密码" value={newPassword}
-              onChange={function (e) { setNewPassword(e.target.value) }}
-              minLength={6} />
-
-            <button type="submit" disabled={loading}>
-              {loading ? '保存中…' : '保存密码并进入'}
-            </button>
-
-            <p className="login-hint">
-              <button className="link-btn" onClick={onLogin}>
-                跳过，直接进入
+              <button className="link-btn" onClick={handleResendLink}>
+                {loading ? '发送中…' : '重新发送'}
               </button>
-              {' · 下次可用密码登录'}
             </p>
-          </form>
+          </div>
         )}
       </section>
     </main>

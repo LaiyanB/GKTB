@@ -142,6 +142,13 @@ input:focus, select:focus {
   line-height: 1.5;
 }
 
+.login-sent-text {
+  margin: 16px 0 0;
+  font-size: 14px;
+  line-height: 1.6;
+  color: var(--ink);
+}
+
 .login-hint {
   text-align: center;
   margin: 12px 0 0;
@@ -275,6 +282,64 @@ input:focus, select:focus {
 
 .sidebar .panel label { margin: 4px 0 2px; font-size: 11px; }
 .sidebar input, .sidebar select { height: 28px; font-size: 12px; padding: 0 7px; }
+
+.major-input-wrap {
+  position: relative;
+}
+.major-input-wrap input {
+  padding-right: 22px;
+}
+.major-clear-btn {
+  position: absolute;
+  right: 4px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  color: var(--muted);
+  font-size: 16px;
+  line-height: 1;
+  cursor: pointer;
+  padding: 2px 4px;
+  width: auto;
+  height: auto;
+  margin: 0;
+}
+.major-clear-btn:hover { color: var(--ink); }
+
+.elective-checks {
+  display: flex;
+  gap: 4px;
+  margin-top: 2px;
+}
+.elective-check {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 3px;
+  padding: 4px 2px;
+  border: 1px solid var(--line);
+  border-radius: 3px;
+  font-size: 11px;
+  cursor: pointer;
+  transition: all 0.12s;
+  margin: 0;
+  color: var(--muted);
+}
+.elective-check input { display: none; }
+.elective-check.active {
+  border-color: var(--accent);
+  background: var(--accent);
+  color: #fff;
+  font-weight: 600;
+}
+.elective-hint {
+  font-size: 10px;
+  color: var(--muted);
+  margin: 2px 0 0;
+  line-height: 1.4;
+}
 
 .sidebar .checks { margin-top: 4px; gap: 2px; }
 .sidebar .checks label { font-size: 11px; gap: 4px; }
@@ -572,6 +637,16 @@ input:focus, select:focus {
   gap: 16px;
 }
 
+/* 桌面端显示三列，隐藏标签页和手机端单列 */
+.desktop-columns {
+  display: contents;
+}
+
+.mobile-tabs,
+.mobile-column {
+  display: none;
+}
+
 .result-column {
   padding: 14px;
   min-height: 220px;
@@ -603,6 +678,26 @@ input:focus, select:focus {
   margin: 10px 0 0;
 }
 
+.expand-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  width: 100%;
+  margin-top: 12px;
+  padding: 8px 12px;
+  background: var(--bg);
+  border: 1px dashed var(--line);
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 13px;
+  color: var(--accent);
+  transition: background 0.15s;
+}
+.expand-btn:hover {
+  background: var(--paper-2);
+}
+
 .rank-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -617,6 +712,22 @@ input:focus, select:focus {
 .trend-up { color: var(--green); }
 .trend-down { color: var(--danger); }
 .trend-flat { color: var(--muted); }
+
+.probability-line {
+  font-size: 13px;
+  margin: 10px 0 0;
+  padding-top: 10px;
+  border-top: 1px solid var(--line);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.probability-line strong {
+  font-size: 18px;
+}
+.prob-冲 { color: var(--danger); }
+.prob-稳 { color: var(--accent); }
+.prob-保 { color: var(--green); }
 
 .rank-auto-hint {
   margin: 2px 0 0;
@@ -1045,12 +1156,14 @@ th {
   .sidebar .panel-title h2 { font-size: 13px; }
   .workspace { margin-left: 200px; padding: 20px; }
   .result-grid { grid-template-columns: 1fr 1fr; }
+  .desktop-columns { display: contents; }
   .hero-metrics { grid-template-columns: 1fr 1fr; }
   .sidebar .fav-list { max-height: 55vh; }
 }
 
 @media (max-width: 768px) {
   .result-grid { grid-template-columns: 1fr; }
+  .desktop-columns { display: contents; }
   .hero-metrics { grid-template-columns: 1fr; }
   .sidebar { width: 200px; font-size: 12px; }
   .sidebar .panel { padding: 5px; }
@@ -1120,10 +1233,59 @@ th {
     pointer-events: auto;
   }
 
-  /* ===== 结果网格单列 ===== */
+  /* ===== 手机端标签页切换 ===== */
   .result-grid {
-    grid-template-columns: 1fr;
+    display: block;
   }
+
+  .desktop-columns {
+    display: none;
+  }
+
+  .mobile-tabs {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 12px;
+    padding: 4px;
+    background: var(--paper-2);
+    border-radius: 4px;
+    border: 1px solid var(--line);
+  }
+
+  .mobile-tab {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    padding: 10px 8px;
+    background: transparent;
+    border: 1px solid transparent;
+    border-radius: 3px;
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+
+  .mobile-tab.active {
+    background: var(--paper);
+    border-color: var(--line);
+    box-shadow: 0 2px 4px var(--shadow);
+  }
+
+  .mobile-tab-count {
+    font-size: 12px;
+    color: var(--muted);
+    font-weight: 600;
+  }
+
+  .mobile-column {
+    display: block;
+  }
+
+  .mobile-column .result-column {
+    padding: 10px;
+  }
+
   .result-column {
     padding: 10px;
   }

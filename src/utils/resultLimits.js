@@ -1,4 +1,5 @@
 export const RESULT_CARD_LIMIT = 50
+export const RESULT_CARD_INITIAL_LIMIT = 10
 export const RESULT_TABLE_LIMIT = 50
 
 export function getVisibleItems(items, limit) {

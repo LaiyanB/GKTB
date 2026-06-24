@@ -32,6 +32,7 @@ export default function ResultCard({ item, onSelectSchool, onFavorite, isFavorit
         <div><span>{latestYear != null ? latestYear + ' 排位' : '往年排位'}</span><strong>{formatNumber(latestRank)}</strong></div>
         <div><span>预测排位</span><strong>{formatNumber(item.predictedRank)}</strong></div>
       </div>
+      <div className={`probability-line prob-${item.level}`}>录取概率 <strong>{item.probability}%</strong></div>
       {trend && <p className={'trend-line trend-' + trend.direction}>{trend.label}</p>}
     </article>
   )

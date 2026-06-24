@@ -3,6 +3,7 @@ import { Search, SlidersHorizontal, BarChart3, ClipboardList, Lightbulb } from '
 
 import { records as mockRecords, subjectLabels } from './data'
 import { classifyRecord, forecastRecord, formatNumber } from './utils/predict'
+import { matchesElectives } from './utils/electives'
 import { adaptAdmissions } from './utils/adaptAdmissions'
 import { useOfflineAdmissions } from './hooks/useOfflineAdmissions'
 import { useScoreSegments } from './hooks/useScoreSegments'
@@ -19,12 +20,13 @@ export default function App() {
   const [score, setScore] = useState('580')
   const [rank, setRank] = useState('56000')
   const [city, setCity] = useState('不限')
-  const [major, setMajor] = useState('不限')
+  const [major, setMajor] = useState('')
   const [publicOnly, setPublicOnly] = useState(false)
   const [noCoop, setNoCoop] = useState(true)
   const [only985, setOnly985] = useState(false)
   const [only211, setOnly211] = useState(false)
   const [onlyDoubleFirstClass, setOnlyDoubleFirstClass] = useState(false)
+  const [electives, setElectives] = useState([])
   const [favorites, setFavorites] = useState([])
   const [user, setUser] = useState(null)
   const [showFavorites, setShowFavorites] = useState(false)
@@ -32,6 +34,7 @@ export default function App() {
   const [showSidebar, setShowSidebar] = useState(false)
   const [detailSchool, setDetailSchool] = useState(null)
   const [schoolMap, setSchoolMap] = useState({})
+  const [activeTab, setActiveTab] = useState('冲')
   const detailRef = useRef(null)
 
   // 从 Supabase 加载当前用户的收藏
@@ -141,7 +144,8 @@ export default function App() {
     return sourceRecords
       .filter((item) => item.subject === subject)
       .filter((item) => city === '不限' || item.city === city)
-      .filter((item) => major === '不限' || item.direction === major || item.major.includes(major))
+      .filter((item) => !major || item.direction.includes(major) || item.major.includes(major))
+      .filter((item) => matchesElectives(item.requirement, electives))
       .filter((item) => !publicOnly || item.type === '公办')
       .filter((item) => !noCoop || !item.coop)
       .filter((item) => !only985 || item.is985)
@@ -150,7 +154,7 @@ export default function App() {
       .map((item) => ({ ...item, ...forecastRecord(item) }))
       .map((item) => ({ ...item, ...classifyRecord(rank, item.predictedRank) }))
       .sort((a, b) => a.predictedRank - b.predictedRank)
-  }, [sourceRecords, subject, city, major, publicOnly, noCoop, only985, only211, onlyDoubleFirstClass, rank])
+  }, [sourceRecords, subject, city, major, electives, publicOnly, noCoop, only985, only211, onlyDoubleFirstClass, rank])
 
   // 按学校去重：同一所学校保留预测排位最好的那条（predictedRank 最小）
   const deduped = useMemo(function () {
@@ -277,6 +281,8 @@ export default function App() {
         setOnly211={setOnly211}
         onlyDoubleFirstClass={onlyDoubleFirstClass}
         setOnlyDoubleFirstClass={setOnlyDoubleFirstClass}
+        electives={electives}
+        setElectives={setElectives}
         showSidebar={showSidebar}
         onCloseSidebar={function () { setShowSidebar(false) }}
       />
@@ -428,9 +434,44 @@ export default function App() {
                   </section>
 
                   <section className="result-grid">
-                    <ResultColumn title="冲" items={grouped.冲} onSelectSchool={handleSelectSchool} onFavorite={toggleFavorite} isFavorited={isFavorited} />
-                    <ResultColumn title="稳" items={grouped.稳} onSelectSchool={handleSelectSchool} onFavorite={toggleFavorite} isFavorited={isFavorited} />
-                    <ResultColumn title="保" items={grouped.保} onSelectSchool={handleSelectSchool} onFavorite={toggleFavorite} isFavorited={isFavorited} />
+                    {/* 手机端标签页导航 */}
+                    <div className="mobile-tabs">
+                      <button 
+                        className={`mobile-tab ${activeTab === '冲' ? 'active' : ''}`}
+                        onClick={() => setActiveTab('冲')}
+                      >
+                        <span className="badge 冲">冲</span>
+                        <span className="mobile-tab-count">{grouped.冲.length}</span>
+                      </button>
+                      <button 
+                        className={`mobile-tab ${activeTab === '稳' ? 'active' : ''}`}
+                        onClick={() => setActiveTab('稳')}
+                      >
+                        <span className="badge 稳">稳</span>
+                        <span className="mobile-tab-count">{grouped.稳.length}</span>
+                      </button>
+                      <button 
+                        className={`mobile-tab ${activeTab === '保' ? 'active' : ''}`}
+                        onClick={() => setActiveTab('保')}
+                      >
+                        <span className="badge 保">保</span>
+                        <span className="mobile-tab-count">{grouped.保.length}</span>
+                      </button>
+                    </div>
+                    
+                    {/* 桌面端三列布局 */}
+                    <div className="desktop-columns">
+                      <ResultColumn title="冲" items={grouped.冲} onSelectSchool={handleSelectSchool} onFavorite={toggleFavorite} isFavorited={isFavorited} />
+                      <ResultColumn title="稳" items={grouped.稳} onSelectSchool={handleSelectSchool} onFavorite={toggleFavorite} isFavorited={isFavorited} />
+                      <ResultColumn title="保" items={grouped.保} onSelectSchool={handleSelectSchool} onFavorite={toggleFavorite} isFavorited={isFavorited} />
+                    </div>
+                    
+                    {/* 手机端单列布局 */}
+                    <div className="mobile-column">
+                      {activeTab === '冲' && <ResultColumn title="冲" items={grouped.冲} onSelectSchool={handleSelectSchool} onFavorite={toggleFavorite} isFavorited={isFavorited} />}
+                      {activeTab === '稳' && <ResultColumn title="稳" items={grouped.稳} onSelectSchool={handleSelectSchool} onFavorite={toggleFavorite} isFavorited={isFavorited} />}
+                      {activeTab === '保' && <ResultColumn title="保" items={grouped.保} onSelectSchool={handleSelectSchool} onFavorite={toggleFavorite} isFavorited={isFavorited} />}
+                    </div>
                   </section>
                 </>
               )}

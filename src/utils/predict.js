@@ -93,12 +93,19 @@ export function forecastRecord(record) {
 
 export function classifyRecord(userRank, predictedRank) {
   const diffRate = (Number(userRank || 0) - predictedRank) / Math.max(predictedRank, 1)
+  // 有界 Logistic 映射：确保任何 diffRate 下概率都在 5%-95% 之间
+  // k=3.0 + 上下界 [5%, 95%]：diffRate=0 → 50%，±0.25 → 66%/34%，±0.5 → 79%/21%
+  // diffRate→±∞ 趋近 95%/5%，不会出现 0% 或 100%
+  const minP = 0.05, maxP = 0.95, k = 3.0
+  const prob = minP + (maxP - minP) / (1 + Math.exp(k * diffRate))
+  const probability = Math.round(prob * 100)
+
   // 保：用户排位比学校要求好 25%+（非常安全）
-  if (diffRate <= -0.25) return { level: '保', risk: '较低', diffRate }
+  if (diffRate <= -0.25) return { level: '保', risk: '较低', diffRate, probability }
   // 稳：用户排位在学校附近 ±25% 以内
-  if (diffRate <= 0.25) return { level: '稳', risk: '中等', diffRate }
+  if (diffRate <= 0.25) return { level: '稳', risk: '中等', diffRate, probability }
   // 冲：用户排位比学校要求差 25%+（挑战院校）
-  return { level: '冲', risk: '偏高', diffRate }
+  return { level: '冲', risk: '偏高', diffRate, probability }
 }
 
 export function trendLabel(rateChange) {

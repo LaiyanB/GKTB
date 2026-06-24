@@ -80,6 +80,7 @@ export function adaptAdmissions(rawRows) {
         is985: Boolean(row.is_985),
         is211: Boolean(row.is_211),
         isDoubleFirstClass: Boolean(row.is_double_first_class),
+        requirement: row.requirement || '',
         ranks: {},
         scores: {},
         planCounts: {},
