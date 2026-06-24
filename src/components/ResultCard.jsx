@@ -13,10 +13,9 @@ function SchoolTags({ item }) {
 
 export default function ResultCard({ item, onSelectSchool, onFavorite, isFavorited }) {
   var favorited = isFavorited ? isFavorited(item.school) : false
-  // 取最新可用年份的排位值（dataYears 已按年份降序排列）
   var latestYear = item.dataYears && item.dataYears.length > 0 ? item.dataYears[0] : null
   var latestRank = latestYear != null ? item.ranks[latestYear] : null
-  var trend = item.ranks ? computeTrend(item.ranks) : null
+  var trend = item.ranks ? computeTrend(item.ranks, item.dataYears) : null
   return (
     <article className="result-card" onClick={function () { onSelectSchool(item.school) }}>
       <div className="result-head">
