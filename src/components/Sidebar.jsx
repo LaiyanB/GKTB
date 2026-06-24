@@ -47,7 +47,7 @@ export default function Sidebar(props) {
         <label>高考分数</label>
         <input type="number" min="0" max="750" value={props.score} onChange={(event) => props.setScore(event.target.value)} />
         <label>全省排位</label>
-        <input value={props.rank} onChange={(event) => props.setRank(event.target.value)} />
+        <input type="number" inputMode="numeric" pattern="[0-9]*" value={props.rank} onChange={(event) => { if (props.onRankManualEdit) props.onRankManualEdit(); props.setRank(event.target.value) }} />
         <p className="rank-auto-hint">分数自动匹配 2024 一分一段表，可手动修正</p>
         <div className="mini-metric">
           <span>2025 {subjectLabels[props.subject]}人数</span>

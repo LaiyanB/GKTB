@@ -36,6 +36,9 @@ export default function App() {
   const [schoolMap, setSchoolMap] = useState({})
   const [activeTab, setActiveTab] = useState('冲')
   const detailRef = useRef(null)
+  const resultGridRef = useRef(null)
+  const rankManuallyEdited = useRef(false)
+  const prevRank = useRef(rank)
 
   // 从 Supabase 加载当前用户的收藏
   async function loadUserFavorites() {
@@ -115,6 +118,7 @@ export default function App() {
   const { lookupRank, status: segStatus } = useScoreSegments()
 
   useEffect(function autoFillRank() {
+    rankManuallyEdited.current = false
     if (segStatus === 'ready' && lookupRank) {
       var rankFromScore = lookupRank(subject, score)
       if (rankFromScore !== null) {
@@ -122,6 +126,13 @@ export default function App() {
       }
     }
   }, [subject, score, lookupRank, segStatus])
+
+  useEffect(function scrollToResultsOnRankChange() {
+    if (prevRank.current !== rank && window.innerWidth <= 640 && resultGridRef.current) {
+      resultGridRef.current.scrollIntoView({ behavior: 'smooth', block: 'start' })
+    }
+    prevRank.current = rank
+  }, [rank])
 
   useEffect(function loadSchoolMap() {
     fetch('/data/school-summary.json')
@@ -267,6 +278,7 @@ export default function App() {
         setScore={setScore}
         rank={rank}
         setRank={setRank}
+        onRankManualEdit={function () { rankManuallyEdited.current = true }}
         city={city}
         setCity={setCity}
         major={major}
@@ -433,7 +445,7 @@ export default function App() {
                     </div>
                   </section>
 
-                  <section className="result-grid">
+                  <section className="result-grid" ref={resultGridRef}>
                     {/* 手机端标签页导航 */}
                     <div className="mobile-tabs">
                       <button 
