@@ -12,12 +12,15 @@ export function formatPercent(value) {
  * 排位趋势方向
  * 正值（排位数变大）= 竞争减弱 ↑；负值（排位数变小）= 竞争加剧 ↓
  */
-export function computeTrend(yearRanks) {
-  var years = Object.keys(yearRanks).map(Number).sort().reverse()
+export function computeTrend(yearRanks, dataYears) {
+  var years = (dataYears && dataYears.length >= 2)
+    ? dataYears.slice().sort(function (a, b) { return b - a })
+    : Object.keys(yearRanks).map(Number).sort(function (a, b) { return b - a })
   if (years.length < 2) return { direction: 'flat', diff: 0, label: '数据不足' }
 
-  var latest = yearRanks[years[0]]
-  var prev = yearRanks[years[1]]
+  var latest = Number(yearRanks[years[0]])
+  var prev = Number(yearRanks[years[1]])
+  if (!latest || !prev) return { direction: 'flat', diff: 0, label: '→ 基本稳定' }
   var diff = latest - prev
   var pct = diff / prev
 
@@ -52,24 +55,18 @@ export function forecastRecord(record) {
     }
   }
 
-  // 直接用历年排位做加权基准 + 保守趋势修正（位次法）
-  // 相比排位占比法，位次法更直观，且不受 2025 年考生总数变化影响
   const ranks = availableYears.map((year) => record.ranks[year])
   const weights = normalizeWeights(baselineWeights, ranks.length)
   const baseline = ranks.reduce((sum, current, index) => sum + current * weights[index], 0)
 
-  // 趋势：正值表示排位逐年下滑（数字变大，竞争减弱）
   let trend = 0
   const trendPairs = Math.min(ranks.length - 1, trendWeights.length)
   for (let index = 0; index < trendPairs; index += 1) {
     trend += (ranks[index] - ranks[index + 1]) * trendWeights[index]
   }
 
-  // 用 0.2 系数削弱趋势影响，允许向两个方向外推
-  // bugfix: 去掉截断到 maxRank 的上界钳制，防止排位下行趋势被抹平
   const predictedRank = Math.max(1, Math.round(baseline + trend * 0.2))
 
-  // 保留 rateChange 用于趋势标签（用排位占比计算，保持标签阈值兼容）
   const rateForYear = (year) => {
     const count = candidateCounts[record.subject]?.[year]
     return count ? record.ranks[year] / count : 0
@@ -93,18 +90,12 @@ export function forecastRecord(record) {
 
 export function classifyRecord(userRank, predictedRank) {
   const diffRate = (Number(userRank || 0) - predictedRank) / Math.max(predictedRank, 1)
-  // 有界 Logistic 映射：确保任何 diffRate 下概率都在 5%-95% 之间
-  // k=3.0 + 上下界 [5%, 95%]：diffRate=0 → 50%，±0.25 → 66%/34%，±0.5 → 79%/21%
-  // diffRate→±∞ 趋近 95%/5%，不会出现 0% 或 100%
   const minP = 0.05, maxP = 0.95, k = 3.0
   const prob = minP + (maxP - minP) / (1 + Math.exp(k * diffRate))
   const probability = Math.round(prob * 100)
 
-  // 保：用户排位比学校要求好 25%+（非常安全）
   if (diffRate <= -0.25) return { level: '保', risk: '较低', diffRate, probability }
-  // 稳：用户排位在学校附近 ±25% 以内
   if (diffRate <= 0.25) return { level: '稳', risk: '中等', diffRate, probability }
-  // 冲：用户排位比学校要求差 25%+（挑战院校）
   return { level: '冲', risk: '偏高', diffRate, probability }
 }
 
@@ -116,12 +107,6 @@ export function trendLabel(rateChange) {
   return '基本稳定'
 }
 
-/**
- * Convert school detail data (from school-summary.json) into prediction result.
- * @param {Record<string, {min_score:number, min_rank:number}>} subjectData
- * @param {string} subject - "physics" | "history"
- * @returns {{ years: number[], ranks: number[], predictedRank: number, residuals: number[] } | null}
- */
 export function forecastSchool(subjectData, subject) {
   const years = ['2024','2023','2022','2021']
     .filter(y => subjectData[y] && Number(subjectData[y].min_rank) > 0)
@@ -130,7 +115,6 @@ export function forecastSchool(subjectData, subject) {
 
   if (years.length === 0) return null
 
-  // Build a fake record that forecastRecord can digest
   const ranks = {}
   years.forEach(y => { ranks[y] = subjectData[String(y)].min_rank })
 
@@ -139,7 +123,6 @@ export function forecastSchool(subjectData, subject) {
   const forecast = forecastRecord(record)
   const predictedRank = forecast.predictedRank
 
-  // Compute per-year residual: residual = actual - predicted
   const residuals = years.map(y => ranks[y] - predictedRank)
 
   return {
