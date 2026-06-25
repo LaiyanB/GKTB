@@ -167,13 +167,25 @@ export default function App() {
       .sort((a, b) => a.predictedRank - b.predictedRank)
   }, [sourceRecords, subject, city, major, electives, publicOnly, noCoop, only985, only211, onlyDoubleFirstClass, rank])
 
-  // 按学校去重：同一所学校保留预测排位最好的那条（predictedRank 最小）
+  // 按学校去重：同一所学校优先保留数据年份最多的记录，年份相同时保留预测排位最好的
   const deduped = useMemo(function () {
-    var seen = new Set()
-    return rows.filter(function (item) {
-      if (seen.has(item.school)) return false
-      seen.add(item.school)
-      return true
+    var best = new Map()
+    rows.forEach(function (item) {
+      var existing = best.get(item.school)
+      if (!existing) {
+        best.set(item.school, item)
+        return
+      }
+      var existingYears = (existing.dataYears || []).length
+      var currentYears = (item.dataYears || []).length
+      if (currentYears > existingYears) {
+        best.set(item.school, item)
+      } else if (currentYears === existingYears && item.predictedRank < existing.predictedRank) {
+        best.set(item.school, item)
+      }
+    })
+    return [...best.values()].sort(function (a, b) {
+      return a.predictedRank - b.predictedRank
     })
   }, [rows])
 
