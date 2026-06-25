@@ -167,24 +167,50 @@ export default function App() {
       .sort((a, b) => a.predictedRank - b.predictedRank)
   }, [sourceRecords, subject, city, major, electives, publicOnly, noCoop, only985, only211, onlyDoubleFirstClass, rank])
 
-  // 按学校去重：同一所学校优先保留数据年份最多的记录，年份相同时保留预测排位最好的
+  // 按学校去重：同一所学校合并所有专业的 ranks（每年取最小排位），确保数据年份完整
   const deduped = useMemo(function () {
-    var best = new Map()
+    var schoolMap = new Map()
     rows.forEach(function (item) {
-      var existing = best.get(item.school)
+      var existing = schoolMap.get(item.school)
       if (!existing) {
-        best.set(item.school, item)
+        schoolMap.set(item.school, {
+          item: item,
+          mergedRanks: { ...(item.ranks || {}) },
+          mergedScores: { ...(item.scores || {}) }
+        })
         return
       }
-      var existingYears = (existing.dataYears || []).length
-      var currentYears = (item.dataYears || []).length
-      if (currentYears > existingYears) {
-        best.set(item.school, item)
-      } else if (currentYears === existingYears && item.predictedRank < existing.predictedRank) {
-        best.set(item.school, item)
+      // 合并 ranks：每年取最小排位
+      var years = Object.keys(item.ranks || {})
+      years.forEach(function (y) {
+        var yr = Number(y)
+        var cur = Number(item.ranks[yr])
+        var best = Number(existing.mergedRanks[yr])
+        if (cur > 0 && (!best || cur < best)) {
+          existing.mergedRanks[yr] = item.ranks[yr]
+        }
+      })
+      years.forEach(function (y) {
+        var yr = Number(y)
+        if (item.scores && item.scores[yr] && !existing.mergedScores[yr]) {
+          existing.mergedScores[yr] = item.scores[yr]
+        }
+      })
+      // 保留预测排位最好的
+      if (item.predictedRank < existing.item.predictedRank) {
+        existing.item = item
       }
     })
-    return [...best.values()].sort(function (a, b) {
+    // 用合并后的 ranks 重建 dataYears 并重新预测
+    var results = []
+    schoolMap.forEach(function (entry) {
+      var merged = { ...entry.item, ranks: entry.mergedRanks, scores: entry.mergedScores }
+      var forecast = forecastRecord(merged)
+      results.push({ ...merged, ...forecast })
+    })
+    // 重新分类
+    results = results.map(function (item) { return { ...item, ...classifyRecord(rank, item.predictedRank) } })
+    return results.sort(function (a, b) {
       return a.predictedRank - b.predictedRank
     })
   }, [rows])
