@@ -1,14 +1,46 @@
+import { useRef, useCallback } from 'react'
 import { candidateCounts, cityOptions, ELECTIVE_OPTIONS, majorPlaceholder, subjectLabels } from '../data'
 import { formatNumber } from '../utils/predict'
 
 export default function Sidebar(props) {
+  var touchStartX = useRef(0)
+  var touchStartY = useRef(0)
+  var swiping = useRef(false)
+
+  var handleTouchStart = useCallback(function (e) {
+    touchStartX.current = e.touches[0].clientX
+    touchStartY.current = e.touches[0].clientY
+    swiping.current = false
+  }, [])
+
+  var handleTouchMove = useCallback(function (e) {
+    var dx = e.touches[0].clientX - touchStartX.current
+    var dy = Math.abs(e.touches[0].clientY - touchStartY.current)
+    // 水平滑动距离 > 30px 且水平方向为主（非垂直滚动）
+    if (dx < -30 && dy < 60) {
+      swiping.current = true
+    }
+  }, [])
+
+  var handleTouchEnd = useCallback(function () {
+    if (swiping.current && props.onCloseSidebar) {
+      props.onCloseSidebar()
+    }
+    swiping.current = false
+  }, [props.onCloseSidebar])
+
   return (
     <>
       <div
         className={'sidebar-backdrop' + (props.showSidebar ? ' visible' : '')}
         onClick={props.onCloseSidebar}
       />
-      <aside className={'sidebar' + (props.showSidebar ? ' open' : '')}>
+      <aside
+        className={'sidebar' + (props.showSidebar ? ' open' : '')}
+        onTouchStart={handleTouchStart}
+        onTouchMove={handleTouchMove}
+        onTouchEnd={handleTouchEnd}
+      >
       <div className="title-block">
         <div className="seal small">粤</div>
         <p className="eyebrow">Application Console</p>
