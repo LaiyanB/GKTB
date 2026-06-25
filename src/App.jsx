@@ -118,7 +118,7 @@ export default function App() {
   const { lookupRank, status: segStatus } = useScoreSegments()
 
   useEffect(function autoFillRank() {
-    rankManuallyEdited.current = false
+    if (rankManuallyEdited.current) return
     if (segStatus === 'ready' && lookupRank) {
       var rankFromScore = lookupRank(subject, score)
       if (rankFromScore !== null) {
@@ -317,6 +317,7 @@ export default function App() {
         rank={rank}
         setRank={setRank}
         onRankManualEdit={function () { rankManuallyEdited.current = true }}
+        onScoreResetRank={function () { rankManuallyEdited.current = false }}
         city={city}
         setCity={setCity}
         major={major}

@@ -77,7 +77,7 @@ export default function Sidebar(props) {
         {props.electives.length > 0 && props.electives.length < 2 &&
           <p className="elective-hint">新高考 3+1+2 通常选 2 科</p>}
         <label>高考分数</label>
-        <input type="number" min="0" max="750" value={props.score} onChange={(event) => props.setScore(event.target.value)} />
+        <input type="number" min="0" max="750" value={props.score} onChange={(event) => { if (props.onScoreResetRank) props.onScoreResetRank(); props.setScore(event.target.value) }} />
         <label>全省排位</label>
         <input type="number" inputMode="numeric" pattern="[0-9]*" value={props.rank} onChange={(event) => { if (props.onRankManualEdit) props.onRankManualEdit(); props.setRank(event.target.value) }} />
         <p className="rank-auto-hint">分数自动匹配 2024 一分一段表，可手动修正</p>
