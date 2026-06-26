@@ -12,7 +12,7 @@ function SchoolTags({ item }) {
 }
 
 export default function ResultCard({ item, onSelectSchool, onFavorite, isFavorited }) {
-  var favorited = isFavorited ? isFavorited(item.school) : false
+  var favorited = isFavorited ? isFavorited(item.school, item.major) : false
   var latestYear = item.dataYears && item.dataYears.length > 0 ? item.dataYears[0] : null
   var latestRank = latestYear != null ? item.ranks[latestYear] : null
   var trend = item.ranks ? computeTrend(item.ranks, item.dataYears) : null

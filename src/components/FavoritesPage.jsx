@@ -87,7 +87,7 @@ export default function FavoritesPage({ favorites, onRemove, onReorder, onClear,
 
       <div className="fav-grid">
         {favorites.map(function (item, index) {
-          var favorited = isFavorited ? isFavorited(item.school) : false
+          var favorited = isFavorited ? isFavorited(item.school, item.major) : false
           var latestYear = item.dataYears && item.dataYears.length > 0 ? item.dataYears[0] : null
           var latestRank = latestYear != null ? item.ranks[latestYear] : null
 
@@ -119,7 +119,7 @@ export default function FavoritesPage({ favorites, onRemove, onReorder, onClear,
                 )}
                 <button
                   className="fav-card-remove"
-                  onClick={function (e) { e.stopPropagation(); onRemove(item.school) }}
+                  onClick={function (e) { e.stopPropagation(); onRemove(item.school, item.major) }}
                   title="移出清单"
                 >×</button>
               </div>

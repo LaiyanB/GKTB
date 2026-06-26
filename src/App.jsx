@@ -229,8 +229,11 @@ export default function App() {
     })
   }
 
-  function removeFavorite(schoolName) {
-    setFavorites((current) => current.filter(function (item) { return item.school !== schoolName }))
+  function removeFavorite(schoolName, majorName) {
+    setFavorites((current) => current.filter(function (item) {
+      if (majorName !== undefined) return !(item.school === schoolName && item.major === majorName)
+      return item.school !== schoolName
+    }))
   }
 
   function reorderFavorites(fromIndex, toIndex) {
@@ -261,11 +264,16 @@ export default function App() {
   }
 
   var favoritedSet = useMemo(function () {
-    return new Set(favorites.map(function (f) { return f.school }))
+    return new Set(favorites.map(function (f) { return f.school + '|' + (f.major || '') }))
   }, [favorites])
 
-  function isFavorited(schoolName) {
-    return favoritedSet.has(schoolName)
+  function isFavorited(schoolName, majorName) {
+    if (majorName !== undefined) return favoritedSet.has(schoolName + '|' + majorName)
+    // 无 major 参数时，检查该校是否有任意专业被收藏
+    for (var entry of favoritedSet) {
+      if (entry.startsWith(schoolName + '|')) return true
+    }
+    return false
   }
 
   function handleSelectSchool(schoolName) {
