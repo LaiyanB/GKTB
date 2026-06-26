@@ -63,19 +63,19 @@ export default function Sidebar(props) {
               <label key={subj} className={'elective-check' + (checked ? ' active' : '')}>
                 <input type="checkbox" checked={checked}
                   onChange={function () {
-                    if (checked) {
-                      props.setElectives(props.electives.filter(function (s) { return s !== subj }))
-                    } else {
-                      props.setElectives([].concat(props.electives, [subj]))
-                    }
-                  }} />
+                      if (checked) {
+                        props.setElectives(props.electives.filter(function (s) { return s !== subj }))
+                      } else if (props.electives.length < 2) {
+                        props.setElectives([].concat(props.electives, [subj]))
+                      }
+                    }} />
                 {subj}
               </label>
             )
           })}
         </div>
-        {props.electives.length > 0 && props.electives.length < 2 &&
-          <p className="elective-hint">新高考 3+1+2 通常选 2 科</p>}
+        {props.electives.length < 2 &&
+          <p className="elective-hint">再选科目需选 2 科（最多 2 科）</p>}
         <label>高考分数</label>
         <input type="number" min="0" max="750" value={props.score} onChange={(event) => { if (props.onScoreResetRank) props.onScoreResetRank(); props.setScore(event.target.value) }} />
         <label>全省排位</label>
